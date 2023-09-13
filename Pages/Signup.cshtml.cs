@@ -77,7 +77,7 @@ namespace p2pRideshare.Pages
                 }
 
                 successMessage = "Your account has been created successfully. Please login";
-                Response.Redirect("/?success=" + successMessage);
+                //Response.Redirect("/?success=" + successMessage);
             }
 
 
