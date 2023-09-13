@@ -23,25 +23,52 @@
   <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
 </head>
 <body class="hold-transition register-page">
-<div class="register-box">
+<div class="">
   <div class="card card-outline card-primary">
     <div class="card-header text-center">
-      <a href="../../index2.html" class="h1"><b>P2P</b>Ride Share</a>
+      <a href="/" class="h1"><b>P2P</b>Ride Share</a>
     </div>
     <div class="card-body">
       <p class="login-box-msg">Register a new membership</p>
+                @if (Model.errorMessage.Length > 0)
+                {
+        <div class="d-flex justify-content-between w-100 flex-wrap">
+            <div class="mb-3 mb-lg-0">
+                <div class="alert alert-danger" role="alert">
+                    <strong>@Model.errorMessage</strong>
+                </div>
+            </div>
+        </div>
+                }
 
-      <form action="" method="post">
+                @if (Model.successMessage.Length > 0)
+                {
+        <div class="d-flex justify-content-between w-100 flex-wrap">
+            <div class="mb-3 mb-lg-0">
+                <div class="alert alert-success" role="alert">
+                    <strong>@Model.successMessage</strong>
+                </div>
+            </div>
+        </div>
+                }
+      <form method="POST" enctype="multipart/form-data" >
+
+
+        <div class="row">
+            <div class="col-12">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full name">
+          <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full name"  value="" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
             </div>
           </div>
         </div>
+        </div>
+
+        <div class="col-6">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" id="idno" name="idno" placeholder="ID No.">
+          <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" value="" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -50,68 +77,103 @@
         </div>
 
          <div class="input-group mb-3">
+          <input type="text" class="form-control" id="physicaladdress" name="physicaladdress" placeholder="Physical Address" value="" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="input-group mb-1">
+          <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-lock"></span>
+            </div>
+          </div>
+
+          
+        </div>
+        <!-- An element to toggle between password visibility -->
+            <input type="checkbox" onclick="myFunction()"> Show Password
+
+        
+
+         <div class="input-group mb-3 mt-1">
         <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="idpic" name="idpic">
+                      <input type="file" class="custom-file-input" id="idpic" name="idpic" onchange="previewId()" required>
                       <label class="custom-file-label" for="idpic">Upload picture of your ID</label>
                     </div>
                </div>
-
                <div class="input-group mb-3">
-        <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="profilepic" name="profilepic">
-                      <label class="custom-file-label" for="profilepic">Upload your picture</label>
-                    </div>
+                  <img class="img-thumbnail" style="width:40%" src="" id="idFrame" alt="Upload ID Pic">
                </div>
 
 
 
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" id="physicaladdress" name="physicaladdress" placeholder="Physical Address">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
-            </div>
-          </div>
+             
+
+
+       
+
+        
+
         </div>
 
-        <div class="input-group mb-3">
-          <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-user"></span>
-            </div>
-          </div>
-        </div>
-
+        <div class="col-6">
 
         <div class="input-group mb-3">
-          <input type="email" class="form-control" id="email" name="email" placeholder="Email">
+          <input type="email" class="form-control" id="email" name="email" placeholder="Email" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-envelope"></span>
             </div>
           </div>
         </div>
+
         <div class="input-group mb-3">
-          <input type="password" class="form-control" id="password" name="password" placeholder="Password">
+          <input type="text" class="form-control" id="idno" name="idno" placeholder="ID No." required>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-user"></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="input-group mb-1">
+          <input type="password" class="form-control" id="retypepassword" name="retypepassword" placeholder="Retype password" required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-lock"></span>
             </div>
           </div>
         </div>
-        <div class="input-group mb-3">
-          <input type="password" class="form-control" id="retypepassword" name="retypepassword" placeholder="Retype password">
-          <div class="input-group-append">
-            <div class="input-group-text">
-              <span class="fas fa-lock"></span>
-            </div>
-          </div>
+        <div class="form-text confirm-message">.</div>
+        
+
+          <div class="input-group mb-3 mt-1">
+        <div class="custom-file">
+                      <input type="file" class="custom-file-input" id="profilepic" name="profilepic" onchange="previewProfile()" required>
+                      <label class="custom-file-label" for="profilepic">Upload your picture</label>
+                    </div>
+               </div>
+               <div class="input-group mb-3">
+                  <img class="img-thumbnail" style="width:40%" src="" id="profileFrame" alt="Upload Profile Pic">
+               </div>
+
         </div>
+
+        </div>
+
+
+
+
         <div class="row">
           <div class="col-8">
             <div class="icheck-primary">
-              <input type="checkbox" id="agreeterms" name="agreeterms" value="agree">
+              <input type="checkbox" id="agreeterms" name="agreeterms" value="agree" required>
               <label for="agreeterms">
                I agree to the <a href="#">terms</a>
               </label>
@@ -135,9 +197,62 @@
 
 <!-- jQuery -->
 <script src="~/plugins/jquery/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <!-- Bootstrap 4 -->
 <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- AdminLTE App -->
 <script src="~/dist/js/adminlte.min.js"></script>
+
+<script>
+            function previewId() {
+                    idFrame.src = URL.createObjectURL(event.target.files[0]);
+            }
+
+            function previewProfile() {
+                    profileFrame.src = URL.createObjectURL(event.target.files[0]);
+            }
+            function myFunction() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
+</script>
+
+<script>
+    $('#password, #retypepassword').on('keyup', function(){
+
+        $('.confirm-message').removeClass('success-message').removeClass('error-message');
+
+        let password=$('#password').val();
+        let confirm_password=$('#retypepassword').val();
+
+        if(password===""){
+            $('.confirm-message').text("Password Field cannot be empty").addClass('error-message');
+        }
+        else if(confirm_password===""){
+            $('.confirm-message').text("Confirm Password Field cannot be empty").addClass('error-message');
+        }
+        else if(confirm_password===password)
+        {
+            $('.confirm-message').text('Password Match!').addClass('success-message');
+        }
+        else{
+            $('.confirm-message').text("Password Doesn't Match!").addClass('error-message');
+        }
+
+    });
+</script>
+
+<style>
+        .success-message{
+            color:green
+        }
+        .error-message{
+            color:red;
+        }
+    </style>
 </body>
 </html>
