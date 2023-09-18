@@ -1,8 +1,12 @@
+using MailKit.Net.Smtp;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using MimeKit;
 using p2pRideshare.FileUploadService;
 using p2pRideshare.Models;
 using System.Data.SqlClient;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace p2pRideshare.Pages
 {
@@ -44,19 +48,19 @@ namespace p2pRideshare.Pages
             user.phone = Request.Form["phone"];
             user.physicalAddress = Request.Form["physicaladdress"];
             user.password = Request.Form["password"];
-            user.retypePassowrd = Request.Form["retypepassword"];
             user.email = Request.Form["email"];
             user.idNo = Request.Form["idno"];
             user.username = user.email;
-            user.password = "Temporary Password";
+            user.password = computePassHash(user.password);
+            user.accountStatus = "Pending Review";
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
                     connection.Open();
-                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password)" +
-                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password)";
+                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus)" +
+                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus)";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -69,6 +73,7 @@ namespace p2pRideshare.Pages
                         command.Parameters.AddWithValue("@physicalAddress", user.physicalAddress);
                         command.Parameters.AddWithValue("@userName", user.username);
                         command.Parameters.AddWithValue("@password", user.password);
+                        command.Parameters.AddWithValue("@accountStatus", user.accountStatus);
 
                         command.ExecuteNonQuery();
                     }
@@ -76,7 +81,17 @@ namespace p2pRideshare.Pages
                     connection.Close();
                 }
 
-                successMessage = "Your account has been created successfully. Please login";
+                if (!SendSignUpEmail(user.email, user.fullName))
+                {
+                    successMessage = "There was an error sending your email confirmation. Please contact support.";
+                }
+
+                else 
+                {
+                    successMessage = "We have created an account for you. Please check your email for more details";
+                        
+                }
+                
                 //Response.Redirect("/?success=" + successMessage);
             }
 
@@ -86,10 +101,63 @@ namespace p2pRideshare.Pages
             {
                 errorMessage = ex.Message;
             }
-            
-
-
-
+   
         }
+
+        public bool SendSignUpEmail(string email, string fullname)
+        {
+            try
+            {
+                var mailMessage = new MimeMessage();
+                mailMessage.From.Add(new MailboxAddress("P2P Ride Share", "info@p2prideshare.co.zw"));
+                mailMessage.To.Add(new MailboxAddress(fullname, email));
+                mailMessage.Subject = "New Account Confirmation";
+                mailMessage.Body = new TextPart("plain")
+                {
+                    Text = "Hello. This is to confirm your sign up. Your username is " + email + " Please login using that username and your password"
+                };
+
+                using (var smtpClient = new SmtpClient())
+                {
+                    smtpClient.Connect("mail.zimbotech.co.zw", 465, true);
+                    smtpClient.Authenticate("sydney@zimbotech.co.zw", "@@###SMCsida12");
+                    smtpClient.Send(mailMessage);
+                    smtpClient.Disconnect(true);
+                }
+
+                //function to send an email after user has signed up
+                return true;
+
+            }
+            catch (Exception)
+            {
+                return false;
+            }
+        }
+
+        public string computePassHash(string rawPassword)
+        {
+           
+            
+            //function to compute the password hash value for encryption
+
+            // Create a SHA256
+            using (SHA256 sha256Hash = SHA256.Create())
+            {
+                // ComputeHash - returns byte array
+                byte[] bytes = sha256Hash.ComputeHash(Encoding.UTF8.GetBytes(rawPassword));
+
+                // Convert byte array to a string
+                StringBuilder builder = new StringBuilder();
+                for (int i = 0; i < bytes.Length; i++)
+                {
+                    builder.Append(bytes[i].ToString("x2"));
+                }
+                return builder.ToString();
+            }
+        }
+
+            
+        
     }
 }

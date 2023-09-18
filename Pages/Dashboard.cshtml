@@ -43,30 +43,49 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="inputName">Project Name</label>
-                            <input type="text" id="inputName" class="form-control">
+                            <label for="pickupLocation">Pickup Location</label>
+                            <input type="text" id="pickupLocation" name="pickupLocation" class="form-control">
                         </div>
+                              
                         <div class="form-group">
-                            <label for="inputDescription">Project Description</label>
-                            <textarea id="inputDescription" class="form-control" rows="4"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="inputStatus">Status</label>
-                            <select id="inputStatus" class="form-control custom-select">
-                                <option selected disabled>Select one</option>
-                                <option>On Hold</option>
-                                <option>Canceled</option>
-                                <option>Success</option>
+                            <label for="pickupTime">Pickup Time</label>
+                            <select id="pickupTime" class="form-control custom-select">
+                                <option selected disabled>Select time</option>
+                                       
+                                        @{
+                                            string reqstartTime = DateTime.Now.ToString("HH:mm tt");
+                                            string reqendTime = "6:30 PM";
+                                            TimeSpan reqinterval = new TimeSpan(0, 30, 0);
+
+                                            while (DateTime.Parse(reqstartTime) <= DateTime.Parse(reqendTime))
+                                            {
+                                                <option>@reqstartTime</option>
+
+                                                reqstartTime = DateTime.Parse(reqstartTime).Add(reqinterval).ToString("HH:mm tt");
+                                            }
+                                        }
+                                        
                             </select>
                         </div>
+
+
+                                <div class="form-group">
+                                    <label for="dropoffLocation">Drop Off Location</label>
+                                    <input type="text" id="dropoffLocation" name="dropoffLocation" class="form-control">
+                                </div>
+
+
                         <div class="form-group">
-                            <label for="inputClientCompany">Client Company</label>
-                            <input type="text" id="inputClientCompany" class="form-control">
+                            <label for="lugageDescription">Luggage Description</label>
+                            <input type="text" id="lugageDescription" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="inputProjectLeader">Project Leader</label>
-                            <input type="text" id="inputProjectLeader" class="form-control">
+                            <label for="extraPassengers">No. Of Extra Passengers</label>
+                            <input type="text" id="extraPassengers" class="form-control">
                         </div>
+
+
+                                
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -85,17 +104,89 @@
                     </div>
                     <div class="card-body">
                         <div class="form-group">
-                            <label for="inputEstimatedBudget">Estimated budget</label>
-                            <input type="number" id="inputEstimatedBudget" class="form-control">
+                            <label for="pickupLocation">Pickup Location</label>
+                                    <input type="text" id="pickupLocation" name="pickupLocation" class="form-control">
                         </div>
                         <div class="form-group">
-                            <label for="inputSpentBudget">Total amount spent</label>
-                            <input type="number" id="inputSpentBudget" class="form-control">
+                            <label for="finalDestination">Final Destination</label>
+                                    <input type="text" id="finalDestination" name="finalDestination" class="form-control">
                         </div>
+
+                                <div class="form-group">
+                                    <label for="pickupTime">Pickup Time</label>
+                                    <select id="pickupTime" class="form-control custom-select">
+                                        <option selected disabled>Select time</option>
+
+
+                                        @{
+                                            string startTime = DateTime.Now.ToString("HH:mm tt");
+                                            string endTime = "6:30 PM";
+                                            TimeSpan interval = new TimeSpan(0, 30, 0);
+
+                                            while (DateTime.Parse(startTime) <= DateTime.Parse(endTime))
+                                            {
+                                                <option>@startTime</option>
+
+                                                startTime = DateTime.Parse(startTime).Add(interval).ToString("HH:mm tt");
+                                            }
+                                        }
+                                        
+                                        
+
+                                    </select>
+                                </div>
+
+
+                                <div class="row">
+
+                                    <div class="col-sm-4">
                         <div class="form-group">
-                            <label for="inputEstimatedDuration">Estimated project duration</label>
-                            <input type="number" id="inputEstimatedDuration" class="form-control">
+                            <label for="vehicleRegNo">Vehicle Reg No</label>
+                                    <input type="text" id="vehicleRegNo" name="vehicleRegNo" class="form-control">
                         </div>
+                        </div>
+                                    <div class="col-sm-4">
+                        <div class="form-group">
+                            <label for="vehicleMake">Vehicle Make</label>
+                                    <input type="text" id="vehicleMake" name="vehicleMake" class="form-control">
+                        </div>
+
+                        </div>
+                                    <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="vehicleColor">Vehicle Color</label>
+                                    <input type="text" id="vehicleColor" name="vehicleColor" class="form-control">
+                                </div>
+                                </div>
+                                </div>
+                            <div class="row">
+
+                                    <div class="col-sm-6">
+                                <div class="input-group mb-3 mt-1">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="licensePic" name="licensePic" onchange="previewLicense()" required>
+                                        <label class="custom-file-label" for="licensePic">Driver's License</label>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <img class="img-thumbnail" style="width:100%" src="" id="licenseFrame" alt="Picture of your License">
+                                </div>
+                                </div>
+
+                                    <div class="col-sm-6">
+                                <div class="input-group mb-3 mt-1">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="zinaraPic" name="zinaraPic" onchange="previewZinara()" required>
+                                        <label class="custom-file-label" for="zinaraPic">ZINARA License</label>
+                                    </div>
+                                </div>
+                                <div class="input-group mb-3">
+                                    <img class="img-thumbnail" style="width:100%" src="" id="zinaraFrame" alt="Picture of ZINARA License">
+                                </div>
+
+                                </div>
+
+                            </div>
                     </div>
                     <!-- /.card-body -->
                 </div>
@@ -108,10 +199,27 @@
                 <input type="submit" value="Create new Project" class="btn btn-success float-right">
             </div>
         </div>
-    </section>
+
+      </section>
     <!-- /.content -->
-<!-- /.content-wrapper -->
-</div>
-</div>
-</div>
+    <!-- /.content-wrapper -->
+    
+
+
+        </div>
+    </div>
+
+    </div>
+
+<script>
+
+
+        function previewLicense() {
+            licenseFrame.src = URL.createObjectURL(event.target.files[0]);
+        }
+
+    function previewZinara() {
+        zinaraFrame.src = URL.createObjectURL(event.target.files[0]);
+    }
+</script>
 

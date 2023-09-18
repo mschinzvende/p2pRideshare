@@ -11,8 +11,8 @@
         public string email = "";
         public string physicalAddress = "";
         public string password = "";
-        public string retypePassowrd = "";
         public string username = "";
+        public string accountStatus = "";
 
 
 

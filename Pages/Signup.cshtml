@@ -11,7 +11,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>AdminLTE 3 | Registration Page (v2)</title>
+  <title>P2P Ride Share - Register Account</title>
 
   <!-- Google Font: Source Sans Pro -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700&display=fallback">
@@ -29,7 +29,7 @@
       <a href="/" class="h1"><b>P2P</b>Ride Share</a>
     </div>
     <div class="card-body">
-      <p class="login-box-msg">Register a new membership</p>
+      <p class="login-box-msg">Register a new account</p>
                 @if (Model.errorMessage.Length > 0)
                 {
         <div class="d-flex justify-content-between w-100 flex-wrap">
@@ -156,7 +156,7 @@
           <div class="input-group mb-3 mt-1">
         <div class="custom-file">
                       <input type="file" class="custom-file-input" id="profilepic" name="profilepic" onchange="previewProfile()" required>
-                      <label class="custom-file-label" for="profilepic">Upload your picture</label>
+                      <label class="custom-file-label" for="profilepic">Upload your passport sized picture</label>
                     </div>
                </div>
                <div class="input-group mb-3">
@@ -181,7 +181,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-            <button type="submit" class="btn btn-primary btn-block">Register</button>
+                            <button type="submit" class="btn btn-primary btn-block">Submit Information</button>
           </div>
           <!-- /.col -->
         </div>
