@@ -53,14 +53,15 @@ namespace p2pRideshare.Pages
             user.username = user.email;
             user.password = computePassHash(user.password);
             user.accountStatus = "Pending Review";
+            user.userType = "General User";
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
                     connection.Open();
-                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus)" +
-                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus)";
+                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus, userType)" +
+                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus, @userType)";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -74,6 +75,7 @@ namespace p2pRideshare.Pages
                         command.Parameters.AddWithValue("@userName", user.username);
                         command.Parameters.AddWithValue("@password", user.password);
                         command.Parameters.AddWithValue("@accountStatus", user.accountStatus);
+                        command.Parameters.AddWithValue("@userType", user.userType);
 
                         command.ExecuteNonQuery();
                     }

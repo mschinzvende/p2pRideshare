@@ -13,6 +13,7 @@
         public string password = "";
         public string username = "";
         public string accountStatus = "";
+        public string userType = "";
 
 
 

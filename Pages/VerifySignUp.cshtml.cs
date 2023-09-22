@@ -3,20 +3,10 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace p2pRideshare.Pages
 {
-    public class DashboardModel : PageModel
+    public class VerifySignUpModel : PageModel
     {
         public void OnGet()
         {
-        }
-
-        public void OnPostGetARide()
-        {
-
-        }
-
-        public void OnPostOfferRide()
-        {
-
         }
     }
 }
