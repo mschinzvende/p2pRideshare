@@ -1,6 +1,10 @@
 ﻿@page
 @model p2pRideshare.Pages.VerifySignUpModel
 @{
+    if (Globals.logged_in_user == "")
+    {
+        Response.Redirect("/");
+    }
 }
 <!-- DataTables -->
 <link rel="stylesheet" href="~/plugins/datatables-bs4/css/dataTables.bootstrap4.min.css">
@@ -16,7 +20,26 @@
             <section class="content-header">
                 <div class="container-fluid">
 <!-- Main content -->
-
+                    @if (Model.errorMessage.Length > 0)
+                    {
+                        <div class="d-flex justify-content-between w-100 flex-wrap">
+                            <div class="mb-3 mb-lg-0">
+                                <div class="alert alert-danger" role="alert">
+                                    <strong>@Model.errorMessage</strong>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                    @if (Model.successMessage.Length > 0)
+                    {
+                        <div class="d-flex justify-content-between w-100 flex-wrap">
+                            <div class="mb-3 mb-lg-0">
+                                <div class="alert alert-success" role="alert">
+                                    <strong>@Model.successMessage</strong>
+                                </div>
+                            </div>
+                        </div>
+                    }
         <div class="row">
             <div class="col-12">
                 <div class="card">
@@ -25,40 +48,89 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table id="example2" class="table table-bordered table-hover">
+
+
+
+                                    <div class="row mb-12">
+                                        <div class="col-lg-4 col-sm-4">
+
+                                            <form method="post" asp-page-handler="searchUser">
+
+                                            <div class="mb-3">
+
+                                          
+
+                                                <div class="input-group input-group-merge search-bar">
+                                                   
+                                                    <input type="text" class="form-control" id="idSearch" name="idSearch" placeholder="Enter Nat ID" aria-label="Search" aria-describedby="topbar-addon" required>
+                                                    <button class="btn btn-secondary btn-sm" type="submit">Search</button>
+
+                                                </div>
+
+
+                                                </div>
+                                            </form>
+                                        </div>
+
+
+
+                                        </div>
+
+
+                        <table id="example" class="table table-sm table-nowrap mb-0 rounded">
                             <thead>
                                 <tr>
-                                    <th>Full Name</th>
-                                    <th>ID Number</th>
-                                    <th>ID Scan</th>
-                                    <th>Current Picture</th>
+                                    <th onclick="sortTable(0)">Full Name</th>
+                                    <th onclick="sortTable(1)">ID Number</th>
+                                                <th >ID Scan</th>
+                                                <th >Current Picture</th>
+                                                <th>A.I %</th>
+                                                <th onclick="sortTable(5)">Status</th>
                                     <th>Action</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>Full name here</td>
-                                    <td>Id number here</td>
-                                    <td>Picture of ID here</td>
-                                    <td>Passport size picture for verification </td>
+                                  @foreach(var user in Model.userslist)
+                                        {
+                                                
+                                            
+                                            <tr>
+                                    <td>@user.fullName</td>
+                                    <td>@user.idNo</td>
+                                                    <td><img src="/mugshots/@user.idScan" alt="userIDPic" class="img-fluid img-thumbnail"></td>
+                                                    <td><img src="/mugshots/@user.profilePic" alt="userIDScan" class="img-fluid img-thumbnail"></td>
+                                                    <td>@user.aiVerification</td>
+                                                    <td>@user.accountStatus</td>
                                     <td>
 
                                                     <div class="btn-group">
-                                                        <button type="button" class="btn btn-success">Action</button>
-                                                        <button type="button" class="btn btn-success dropdown-toggle" data-toggle="dropdown">
+                                                        <button type="button" class="btn btn-sm btn-success">Action</button>
+                                                        <button type="button" class="btn btn-sm btn-success dropdown-toggle" data-toggle="dropdown">
                                                             <span class="sr-only">Toggle Dropdown</span>
                                                         </button>
                                                         <div class="dropdown-menu" role="menu">
-                                                            <a class="dropdown-item" href="#">Approve</a>
-                                                            <a class="dropdown-item" href="#">Reject</a>
-                                                            <a class="dropdown-item" href="#">Set Pending</a>
-                                                            <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#">Separated link</a>
+
+                                                                @if (user.accountStatus != "Approved")
+                                                                {
+                                                                    <a class="dropdown-item" href="/VerifySignUp?verifAction=Approved&userId=@user.userId">Approve</a>
+                                                                }
+
+                                                                @if (user.accountStatus != "Rejected")
+                                                                {
+                                                                    <a class="dropdown-item" href="/VerifySignUp?verifAction=Rejected&userId=@user.userId">Reject</a>
+                                                                }
+                                                                @if (user.accountStatus != "Pending")
+                                                                {
+                                                                    <a class="dropdown-item" href="/VerifySignUp?verifAction=Pending&userId=@user.userId">Set Pending</a>
+                                                                }
+                                                                <div class="dropdown-divider"></div>
+                                                            <a class="dropdown-item" href="#">View Profile</a>
                                                         </div>
                                                     </div>
 
                                     </td>
                                 </tr>
+                                }
                                 
                             </tbody>
                             
@@ -84,7 +156,7 @@
 
 
 
-<!-- DataTables  & Plugins -->
+<!-- DataTables  & Plugins 
 <script src="~/plugins/datatables/jquery.dataTables.min.js"></script>
 <script src="~/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
 <script src="~/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
@@ -96,23 +168,107 @@
 <script src="~/plugins/pdfmake/vfs_fonts.js"></script>
 <script src="~/plugins/datatables-buttons/js/buttons.html5.min.js"></script>
 <script src="~/plugins/datatables-buttons/js/buttons.print.min.js"></script>
-<script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>
+<script src="~/plugins/datatables-buttons/js/buttons.colVis.min.js"></script>-->
 
 
 <script>
-    $(function () {
-        $("#example2").DataTable({
-            "responsive": true, "lengthChange": false, "autoWidth": false,
-            "buttons": ["copy", "csv", "excel", "pdf", "print", "colvis"]
-        }).buttons().container().appendTo('#example2_wrapper .col-md-6:eq(0)');
-        $('#example2').DataTable({
-            "paging": true,
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-        });
-    });
+    function NameFunction() {
+            // Declare variables
+            var input, filter, table, tr, td, i, txtValue;
+            input = document.getElementById("NameInput");
+            filter = input.value.toUpperCase();
+            table = document.getElementById("example");
+            tr = table.getElementsByTagName("tr");
+
+            // Loop through all table rows, and hide those who don't match the search query
+            for (i = 0; i < tr.length; i++) {
+                td = tr[i].getElementsByTagName("td")[1];
+                if (td) {
+                    txtValue = td.textContent || td.innerText;
+                    if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                        tr[i].style.display = "";
+                    } else {
+                        tr[i].style.display = "none";
+                    }
+                }
+            }
+        }
+
+
+    function IdFunction() {
+        // Declare variables
+        var input, filter, table, tr, td, i, txtValue;
+        input = document.getElementById("IdInput");
+        filter = input.value.toUpperCase();
+        table = document.getElementById("example");
+        tr = table.getElementsByTagName("tr");
+
+        // Loop through all table rows, and hide those who don't match the search query
+        for (i = 0; i < tr.length; i++) {
+            td = tr[i].getElementsByTagName("td")[3];
+            if (td) {
+                txtValue = td.textContent || td.innerText;
+                if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                    tr[i].style.display = "";
+                } else {
+                    tr[i].style.display = "none";
+                }
+            }
+        }
+    }
+
+    function sortTable(n) {
+        var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+        table = document.getElementById("example");
+        switching = true;
+        // Set the sorting direction to ascending:
+        dir = "asc";
+        /* Make a loop that will continue until
+        no switching has been done: */
+        while (switching) {
+            // Start by saying: no switching is done:
+            switching = false;
+            rows = table.rows;
+            /* Loop through all table rows (except the
+            first, which contains table headers): */
+            for (i = 1; i < (rows.length - 1); i++) {
+                // Start by saying there should be no switching:
+                shouldSwitch = false;
+                /* Get the two elements you want to compare,
+                one from current row and one from the next: */
+                x = rows[i].getElementsByTagName("TD")[n];
+                y = rows[i + 1].getElementsByTagName("TD")[n];
+                /* Check if the two rows should switch place,
+                based on the direction, asc or desc: */
+                if (dir == "asc") {
+                    if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                } else if (dir == "desc") {
+                    if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase()) {
+                        // If so, mark as a switch and break the loop:
+                        shouldSwitch = true;
+                        break;
+                    }
+                }
+            }
+            if (shouldSwitch) {
+                /* If a switch has been marked, make the switch
+                and mark that a switch has been done: */
+                rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                switching = true;
+                // Each time a switch is done, increase this count by 1:
+                switchcount++;
+            } else {
+                /* If no switching has been done AND the direction is "asc",
+                set the direction to "desc" and run the while loop again. */
+                if (switchcount == 0 && dir == "asc") {
+                    dir = "desc";
+                    switching = true;
+                }
+            }
+        }
+    }
 </script>

@@ -14,6 +14,7 @@
         public string username = "";
         public string accountStatus = "";
         public string userType = "";
+        public string aiVerification = "";
 
 
 
