@@ -94,7 +94,7 @@ namespace p2pRideshare.Pages
                             while (reader.Read())
                             {
                                 User user = new User();
-                                user.userId = reader.GetInt32(0);
+                                user.userId = ""+ reader.GetInt32(0);
                                 user.fullName = reader.GetString(1);
                                 user.idNo = reader.GetString(2);
                                 user.idScan = reader.GetString(3);

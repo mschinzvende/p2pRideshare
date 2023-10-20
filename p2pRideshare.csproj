@@ -20,7 +20,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\UserProfile.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\VerifySignUp.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\UserProfile.cshtml" />
   </ItemGroup>
 
 </Project>

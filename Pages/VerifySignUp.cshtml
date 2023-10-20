@@ -97,8 +97,8 @@
                                             <tr>
                                     <td>@user.fullName</td>
                                     <td>@user.idNo</td>
-                                                    <td><img src="/mugshots/@user.idScan" alt="userIDPic" class="img-fluid img-thumbnail"></td>
-                                                    <td><img src="/mugshots/@user.profilePic" alt="userIDScan" class="img-fluid img-thumbnail"></td>
+                                                    <td><img src="/mugshots/@user.idScan" alt="userIDPic" class="img-thumbnail" style="width:40%" ></td>
+                                                    <td><img src="/mugshots/@user.profilePic" alt="userIDScan" class="img-thumbnail" style="width:40%" ></td>
                                                     <td>@user.aiVerification</td>
                                                     <td>@user.accountStatus</td>
                                     <td>
@@ -124,7 +124,7 @@
                                                                     <a class="dropdown-item" href="/VerifySignUp?verifAction=Pending&userId=@user.userId">Set Pending</a>
                                                                 }
                                                                 <div class="dropdown-divider"></div>
-                                                            <a class="dropdown-item" href="#">View Profile</a>
+                                                                <a class="dropdown-item" href="/UserProfile?userId=@user.userId">View Profile</a>
                                                         </div>
                                                     </div>
 

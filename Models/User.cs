@@ -2,7 +2,7 @@
 {
     public class User
     {
-        public int userId;
+        public string userId;
         public string fullName="";
         public string idNo="";
         public string idScan="";

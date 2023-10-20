@@ -181,7 +181,7 @@
           </div>
           <!-- /.col -->
           <div class="col-4">
-                            <button type="submit" class="btn btn-primary btn-block">Submit Information</button>
+                            <button type="submit" id="submitBtn" name="submitBtn" class="btn btn-primary btn-block">Submit Information</button>
           </div>
           <!-- /.col -->
         </div>
@@ -221,30 +221,35 @@
 }
 </script>
 
-<script>
-    $('#password, #retypepassword').on('keyup', function(){
+    <script>
+        $('#password, #retypepassword').on('keyup', function () {
 
-        $('.confirm-message').removeClass('success-message').removeClass('error-message');
+            $('.confirm-message').removeClass('success-message').removeClass('error-message');
 
-        let password=$('#password').val();
-        let confirm_password=$('#retypepassword').val();
+            let password = $('#password').val();
+            let confirm_password = $('#retypepassword').val();
 
-        if(password===""){
-            $('.confirm-message').text("Password Field cannot be empty").addClass('error-message');
-        }
-        else if(confirm_password===""){
-            $('.confirm-message').text("Confirm Password Field cannot be empty").addClass('error-message');
-        }
-        else if(confirm_password===password)
-        {
-            $('.confirm-message').text('Password Match!').addClass('success-message');
-        }
-        else{
-            $('.confirm-message').text("Password Doesn't Match!").addClass('error-message');
-        }
+            const stream = document.getElementById("submitBtn");
 
-    });
-</script>
+            if (password === "") {
+                $('.confirm-message').text("Password Field cannot be empty").addClass('error-message');
+                stream.style.visibility = 'hidden';
+            }
+            else if (confirm_password === "") {
+                $('.confirm-message').text("Confirm Password Field cannot be empty").addClass('error-message');
+                stream.style.visibility = 'hidden';
+            }
+            else if (confirm_password === password) {
+                $('.confirm-message').text('Password Match!').addClass('success-message');
+                stream.style.visibility = 'visible';
+            }
+            else {
+                $('.confirm-message').text("Password Doesn't Match!").addClass('error-message');
+                stream.style.visibility = 'hidden';
+            }
+
+        });
+    </script>
 
 <style>
         .success-message{
