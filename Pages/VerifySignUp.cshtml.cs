@@ -56,7 +56,9 @@ namespace p2pRideshare.Pages
         }
 
         public void OnGet()
+
         {
+            //Globals.GetUpdatedAccountDetails();
             successMessage = Request.Query["successMessage"];
 
             if (successMessage == null)

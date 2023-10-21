@@ -7,6 +7,7 @@ namespace p2pRideshare.Pages
     {
         public void OnGet()
         {
+            //Globals.GetUpdatedAccountDetails();
         }
 
         public void OnPostGetARide()

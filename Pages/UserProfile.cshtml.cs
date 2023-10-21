@@ -13,6 +13,7 @@ namespace p2pRideshare.Pages
 {
     public class UserProfileModel : PageModel
     {
+      
         public string errorMessage = "";
         public string successMessage = "";
         public User user = new User();
@@ -20,6 +21,7 @@ namespace p2pRideshare.Pages
         public UserProfileModel(IFileUploadService fileUploadService) 
         {
             FileUploadService = fileUploadService;
+      
         }
         public IFileUploadService FileUploadService { get; }
 
@@ -231,6 +233,8 @@ namespace p2pRideshare.Pages
 
         public void OnGet()
         {
+            
+
             if(string.IsNullOrEmpty(Request.Query["successMessage"]))
             {
                 successMessage = "";

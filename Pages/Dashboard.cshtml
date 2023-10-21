@@ -1,7 +1,7 @@
 ﻿@page
 @model p2pRideshare.Pages.DashboardModel
 @{
-    if (Globals.logged_in_user == "")
+    if (HttpContext.Session.GetString("UserNAME") == "")
     {
         Response.Redirect("/");
     }
@@ -9,248 +9,256 @@
 
 <div class="row mb-2">
     <div class="col-12">
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
-    <!-- Content Header (Page header) -->
+            <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
 
     
-    <section class="content-header">
-        <div class="container-fluid">
-            <div class="row mb-2">
-                <div class="col-sm-6">
-                    <h1>Ride Sharing Dashboard</h1>
-                </div>
-                <div class="col-sm-6">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="#">Home</a></li>
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>Ride Sharing Dashboard</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
                         
-                    </ol>
-                </div>
-            </div>
-        </div><!-- /.container-fluid -->
-    </section>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
   
 
-    <!-- Main content -->
-    <section class="content">
-
-
-                @if (Globals.user_account_status=="Approved")
+                <!-- Main content -->
+            <section class="content">
+                @if (HttpContext.Session.GetString("UserACCOUNTSTATUS") == "Pending" || HttpContext.Session.GetString("UserACCOUNTSTATUS") == "Rejected")
                 {
-                    
-                
-
-
-        <div class="row">
-            <div class="col-md-6">
-                <div class="card card-primary">
-                    <div class="card-header">
-                        <h3 class="card-title">Request a ride</h3>
-
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-
-                                <form method="POST" enctype="multipart/form-data" asp-page-handler="GetARide">
-                        <div class="form-group">
-                            <label for="pickupLocation">Pickup Location</label>
-                            <input type="text" id="pickupLocation" name="pickupLocation" class="form-control">
-                        </div>
-                              
-                        <div class="form-group">
-                            <label for="pickupTime">Pickup Time</label>
-                            <select id="pickupTime" class="form-control custom-select">
-                                <option selected disabled>Select time</option>
-                                       
-                                        @{
-                                            string reqstartTime = DateTime.Now.ToString("HH:mm tt");
-                                            string reqendTime = "6:30 PM";
-                                            TimeSpan reqinterval = new TimeSpan(0, 30, 0);
-
-                                            while (DateTime.Parse(reqstartTime) <= DateTime.Parse(reqendTime))
-                                            {
-                                                <option>@reqstartTime</option>
-
-                                                reqstartTime = DateTime.Parse(reqstartTime).Add(reqinterval).ToString("HH:mm tt");
-                                            }
-                                        }
-                                        
-                            </select>
-                        </div>
-
-
-                                <div class="form-group">
-                                    <label for="dropoffLocation">Drop Off Location</label>
-                                    <input type="text" id="dropoffLocation" name="dropoffLocation" class="form-control">
+                        <div class="d-flex justify-content-between w-100 flex-wrap">
+                            <div class="mb-3 mb-lg-0">
+                                <div class="alert alert-danger" role="alert">
+                                <strong>Your account is currently @HttpContext.Session.GetString("UserACCOUNTSTATUS")</strong>
                                 </div>
-
-
-                        <div class="form-group">
-                            <label for="lugageDescription">Luggage Description</label>
-                            <input type="text" id="lugageDescription" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="extraPassengers">No. Of Extra Passengers</label>
-                            <input type="text" id="extraPassengers" class="form-control">
-                        </div>
-
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary btn-block">Submit Request</button>
-                                        </div>
-                                    </div>
-
-                             </form>   
-                    </div>
-                    <!-- /.card-body -->
-                </div>
-                <!-- /.card -->
-            </div>
-            <div class="col-md-6">
-
-                <div class="card card-secondary">
-
-                    
-                    <div class="card-header">
-                        <h3 class="card-title">Offer a ride</h3>
-                        
-                        <div class="card-tools">
-                            <button type="button" class="btn btn-tool" data-card-widget="collapse" title="Collapse">
-                                <i class="fas fa-minus"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="card-body">
-
-                                <form method="POST" enctype="multipart/form-data" asp-page-handler="OfferRide">
-                        <div class="form-group">
-                            <label for="pickupLocation">Pickup Location</label>
-                                    <input type="text" id="pickupLocation" name="pickupLocation" class="form-control">
-                        </div>
-                        <div class="form-group">
-                            <label for="finalDestination">Final Destination</label>
-                                    <input type="text" id="finalDestination" name="finalDestination" class="form-control">
-                        </div>
-
-                                <div class="form-group">
-                                    <label for="pickupTime">Pickup Time</label>
-                                    <select id="pickupTime" class="form-control custom-select">
-                                        <option selected disabled>Select time</option>
-
-
-                                        @{
-                                            string startTime = DateTime.Now.ToString("HH:mm tt");
-                                            string endTime = "6:30 PM";
-                                            TimeSpan interval = new TimeSpan(0, 30, 0);
-
-                                            while (DateTime.Parse(startTime) <= DateTime.Parse(endTime))
-                                            {
-                                                <option>@startTime</option>
-
-                                                startTime = DateTime.Parse(startTime).Add(interval).ToString("HH:mm tt");
-                                            }
-                                        }
-                                        
-                                        
-
-                                    </select>
-                                </div>
-
-
-                                <div class="row">
-
-                                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="vehicleRegNo">Vehicle Reg No</label>
-                                    <input type="text" id="vehicleRegNo" name="vehicleRegNo" class="form-control">
-                        </div>
-                        </div>
-                                    <div class="col-sm-4">
-                        <div class="form-group">
-                            <label for="vehicleMake">Vehicle Make</label>
-                                    <input type="text" id="vehicleMake" name="vehicleMake" class="form-control">
-                        </div>
-
-                        </div>
-                                    <div class="col-sm-4">
-                                <div class="form-group">
-                                    <label for="vehicleColor">Vehicle Color</label>
-                                    <input type="text" id="vehicleColor" name="vehicleColor" class="form-control">
-                                </div>
-                                </div>
-                                </div>
-                            <div class="row">
-
-                                    <div class="col-sm-6">
-                                <div class="input-group mb-3 mt-1">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="licensePic" name="licensePic" onchange="previewLicense()" required>
-                                        <label class="custom-file-label" for="licensePic">Driver's License</label>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <img class="img-thumbnail" style="width:100%" src="" id="licenseFrame" alt="Picture of your License">
-                                </div>
-                                </div>
-
-                                    <div class="col-sm-6">
-                                <div class="input-group mb-3 mt-1">
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="zinaraPic" name="zinaraPic" onchange="previewZinara()" required>
-                                        <label class="custom-file-label" for="zinaraPic">ZINARA License</label>
-                                    </div>
-                                </div>
-                                <div class="input-group mb-3">
-                                    <img class="img-thumbnail" style="width:100%" src="" id="zinaraFrame" alt="Picture of ZINARA License">
-                                </div>
-
-                                </div>
-
-                            </div>
-
-                            <div class="row">
-                                        <div class="col-12">
-                                            <button type="submit" class="btn btn-primary btn-block">Submit Offer</button>
-                                        </div>
-                                    </div>
-
-                                </form>
-                    </div>
-                    <!-- /.card-body -->
-
-                   
-                </div>
-                <!-- /.card -->
-            </div>
-        </div>
-        }
-
-
-                @if (Globals.user_account_status == "Pending Review" || Globals.user_account_status == "Rejected")
-                {
-                    <div class="d-flex justify-content-between w-100 flex-wrap">
-                        <div class="mb-3 mb-lg-0">
-                            <div class="alert alert-danger" role="alert">
-                                <strong>Your account is currently @Globals.user_account_status</strong>
                             </div>
                         </div>
-                    </div>
                 }
 
-      </section>
-    <!-- /.content -->
-    <!-- /.content-wrapper -->
-    
+                @if (HttpContext.Session.GetString("UserACCOUNTSTATUS") == "Approved")
+                {
+
+                        <div class="row">
+                            <div class="col-md-12">
+
+                                <div class="card">
+                                    <div class="card-header p-2">
+                                        <ul class="nav nav-pills">
+                                            <li class="nav-item"><a class="nav-link active" href="#requestride" data-toggle="tab">Request Ride</a></li>
+                                            <li class="nav-item"><a class="nav-link " href="#shareride" data-toggle="tab">Share Ride</a></li>
+                                            
+                                        </ul>
+                                    </div><!-- /.card-header -->
+                                    <div class="card-body">
+                                        <div class="tab-content">
+
+                                            <!--Share Ride tab Tab-->
+                                            <div class="tab-pane" id="shareride">
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                <form method="POST" enctype="multipart/form-data" asp-page-handler="OfferRide">
+                                                    <div class="form-group">
+                                                        <label for="pickupLocation">Pickup Location</label>
+                                                        <input type="text" id="pickupLocation" name="pickupLocation" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="finalDestination">Final Destination</label>
+                                                        <input type="text" id="finalDestination" name="finalDestination" class="form-control">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="pickupTime">Pickup Time</label>
+                                                        <select id="pickupTime" class="form-control custom-select">
+                                                            <option selected disabled>Select time</option>
 
 
-        </div>
+                                                            @{
+                                                                string startTime = DateTime.Now.ToString("HH:mm tt");
+                                                                string endTime = "6:30 PM";
+                                                                TimeSpan interval = new TimeSpan(0, 30, 0);
+
+                                                                while (DateTime.Parse(startTime) <= DateTime.Parse(endTime))
+                                                                    {
+                                                                        <option>@startTime</option>
+
+                                                                        startTime = DateTime.Parse(startTime).Add(interval).ToString("HH:mm tt");
+                                                                    }
+                                                              }
+
+
+
+                                                        </select>
+                                                    </div>
+
+
+                                                    <div class="row">
+
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label for="vehicleRegNo">Vehicle Reg No</label>
+                                                                <input type="text" id="vehicleRegNo" name="vehicleRegNo" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label for="vehicleMake">Vehicle Make</label>
+                                                                <input type="text" id="vehicleMake" name="vehicleMake" class="form-control">
+                                                            </div>
+
+                                                        </div>
+                                                        <div class="col-sm-4">
+                                                            <div class="form-group">
+                                                                <label for="vehicleColor">Vehicle Color</label>
+                                                                <input type="text" id="vehicleColor" name="vehicleColor" class="form-control">
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group mb-3 mt-1">
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="licensePic" name="licensePic" onchange="previewLicense()" required>
+                                                                    <label class="custom-file-label" for="licensePic">Driver's License</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group mb-3">
+                                                                <img class="img-thumbnail" style="width:100%" src="" id="licenseFrame" alt="Picture of your License">
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="col-sm-6">
+                                                            <div class="input-group mb-3 mt-1">
+                                                                <div class="custom-file">
+                                                                    <input type="file" class="custom-file-input" id="zinaraPic" name="zinaraPic" onchange="previewZinara()" required>
+                                                                    <label class="custom-file-label" for="zinaraPic">ZINARA License</label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="input-group mb-3">
+                                                                <img class="img-thumbnail" style="width:100%" src="" id="zinaraFrame" alt="Picture of ZINARA License">
+                                                            </div>
+
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <button type="submit" class="btn btn-primary btn-block">Submit Offer</button>
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+                                                </div>
+
+                                                <div class="col-md-6">
+                                                    <p>Results will come here</p>
+                                                </div>
+                                            </div>
+                                            </div>
+                                        <!--End Share ride tab-->
+
+
+                                        <!--Request Ride tab Tab-->
+
+                                            <div class="tab-pane active" id="requestride">
+
+                                                <div class="row">
+                                                    <div class="col-md-6">
+                                                
+                                                <form method="POST" enctype="multipart/form-data" asp-page-handler="GetARide">
+                                                    <div class="form-group">
+                                                        <label for="pickupLocation">Pickup Location</label>
+                                                        <input type="text" id="pickupLocation" name="pickupLocation" class="form-control">
+                                                    </div>
+
+                                                    <div class="form-group">
+                                                        <label for="pickupTime">Pickup Time</label>
+                                                        <select id="pickupTime" class="form-control custom-select">
+                                                            <option selected disabled>Select time</option>
+
+                                                                @{
+                                                                    string reqstartTime = DateTime.Now.ToString("HH:mm tt");
+                                                                    string reqendTime = "6:30 PM";
+                                                                    TimeSpan reqinterval = new TimeSpan(0, 30, 0);
+
+                                                                    while (DateTime.Parse(reqstartTime) <= DateTime.Parse(reqendTime))
+                                                                    {
+                                                                            <option>@reqstartTime</option>
+
+                                                                            reqstartTime = DateTime.Parse(reqstartTime).Add(reqinterval).ToString("HH:mm tt");
+                                                                    }
+                                                                 }
+
+                                                        </select>
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label for="dropoffLocation">Drop Off Location</label>
+                                                        <input type="text" id="dropoffLocation" name="dropoffLocation" class="form-control">
+                                                    </div>
+
+
+                                                    <div class="form-group">
+                                                        <label for="lugageDescription">Luggage Description</label>
+                                                        <input type="text" id="lugageDescription" class="form-control">
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <label for="extraPassengers">No. Of Extra Passengers</label>
+                                                        <input type="text" id="extraPassengers" class="form-control">
+                                                    </div>
+
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <button type="submit" class="btn btn-primary btn-block">Submit Request</button>
+                                                        </div>
+                                                    </div>
+
+                                                </form>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <p>Results will come her</p>
+                                                </div>
+                                                </div>
+                                            </div>
+                                           <!--End Request Ride tab Tab-->
+
+
+                                        </div>
+                                        <!--End tab-content-->
+
+
+                                    </div>
+                                    <!--End card body-->
+
+                                </div>
+                                <!--End card-->
+
+
+                            </div>
+                            <!--End column-->
+
+                        </div>
+                        <!--End row-->
+                }
+
+            </section>
+            <!--End Section-->
+
+       </div>
     </div>
-
-    </div>
+</div>
 
 <script>
 

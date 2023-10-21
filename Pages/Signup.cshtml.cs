@@ -52,16 +52,17 @@ namespace p2pRideshare.Pages
             user.idNo = Request.Form["idno"];
             user.username = user.email;
             user.password = computePassHash(user.password);
-            user.accountStatus = "Pending Review";
+            user.accountStatus = "Pending";
             user.userType = "General User";
+            user.aiVerification = "0%";
 
             try
             {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
                     connection.Open();
-                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus, userType)" +
-                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus, @userType)";
+                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus, userType, aiVerification)" +
+                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus, @userType, @aiVerification)";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -76,6 +77,7 @@ namespace p2pRideshare.Pages
                         command.Parameters.AddWithValue("@password", user.password);
                         command.Parameters.AddWithValue("@accountStatus", user.accountStatus);
                         command.Parameters.AddWithValue("@userType", user.userType);
+                        command.Parameters.AddWithValue("@aiVerification", user.aiVerification);
 
                         command.ExecuteNonQuery();
                     }
@@ -85,16 +87,16 @@ namespace p2pRideshare.Pages
 
                 if (!SendSignUpEmail(user.email, user.fullName))
                 {
-                    successMessage = "There was an error sending your email confirmation. Please contact support.";
+                    successMessage = "Registration Successful but there was an error sending your email confirmation. Please contact support.";
                 }
 
                 else 
                 {
-                    successMessage = "We have created an account for you. Please check your email for more details";
+                    successMessage = "We have created an account for you. Please Login";
                         
                 }
                 
-                //Response.Redirect("/?success=" + successMessage);
+                Response.Redirect("/?successMessage=" + successMessage);
             }
 
 

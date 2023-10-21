@@ -1,7 +1,7 @@
 ﻿@page
 @model p2pRideshare.Pages.VerifySignUpModel
 @{
-    if (Globals.logged_in_user == "")
+    if (HttpContext.Session.GetString("UserNAME") == "")
     {
         Response.Redirect("/");
     }

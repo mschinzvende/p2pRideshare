@@ -4,6 +4,7 @@ using p2pRideshare.Models;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.AspNetCore.Http;
 
 namespace p2pRideshare.Pages
 {
@@ -13,11 +14,36 @@ namespace p2pRideshare.Pages
         public string successMessage ="";
         public void OnGet()
         {
-            Globals.user_picture = "";
-            Globals.user_permission = "";
-            Globals.logged_in_user = "";
-            Globals.user_account_status = "";
-           
+            //Globals.logged_in_user = "";
+            //Globals.user_permission = "";
+            //  Globals.user_picture = "";
+            // Globals.user_account_status = "";
+            //Globals.logged_in_user_id = "";
+
+            HttpContext.Session.SetString("UserID", "" );
+            HttpContext.Session.SetString("UserNAME", "" );
+            HttpContext.Session.SetString("UserPICTURE", "");
+            HttpContext.Session.SetString("UserPERMISSION", "");
+            HttpContext.Session.SetString("UserACCOUNTSTATUS", "");
+
+            if (string.IsNullOrEmpty(Request.Query["successMessage"]))
+            {
+                successMessage = "";
+            }
+            else
+            {
+                successMessage = Request.Query["successMessage"];
+            }
+
+            if (string.IsNullOrEmpty(Request.Query["errorMessage"]))
+            {
+                errorMessage = "";
+            }
+            else
+            {
+                errorMessage = Request.Query["errorMessage"];
+            }
+
         }
 
         public void OnPost()
@@ -46,10 +72,17 @@ namespace p2pRideshare.Pages
                             {
                                 while (reader.Read())
                                 {
+                                    HttpContext.Session.SetString("UserID", "" + reader.GetInt32(0));
+                                    HttpContext.Session.SetString("UserNAME", "" + reader.GetString(1));
+                                    HttpContext.Session.SetString("UserPICTURE", "" + reader.GetString(4));
+                                    HttpContext.Session.SetString("UserPERMISSION", "" + reader.GetString(11));
+                                    HttpContext.Session.SetString("UserACCOUNTSTATUS", "" + reader.GetString(10));
+
+                                    /*Globals.logged_in_user_id = ""+ reader.GetInt32(0);
                                     Globals.logged_in_user = reader.GetString(1);
                                     Globals.user_picture = reader.GetString(4);
                                     Globals.user_permission = reader.GetString(11);
-                                    Globals.user_account_status = reader.GetString(10);
+                                    Globals.user_account_status = reader.GetString(10);*/
 
                                 }
                                 
@@ -98,6 +131,54 @@ namespace p2pRideshare.Pages
                     builder.Append(bytes[i].ToString("x2"));
                 }
                 return builder.ToString();
+            }
+        }
+
+
+        public void GetUpdatedAccountDetails()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Globals.connection_string))
+                {
+                    connection.Open();
+                    string sql = "SELECT * FROM users WHERE userId=@userId";
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId",HttpContext.Session.GetString("UserID"));
+
+
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+
+                            if (reader.HasRows)
+                            {
+                                while (reader.Read())
+                                {
+
+
+                                    HttpContext.Session.SetString("UserNAME", "");
+                                    HttpContext.Session.SetString("UserPICTURE", "");
+                                    HttpContext.Session.SetString("UserPERMISSION", "");
+                                    HttpContext.Session.SetString("UserACCOUNTSTATUS", "");
+
+
+                                    //logged_in_user = reader.GetString(1);
+                                    // user_picture = reader.GetString(4);
+                                    // user_permission = reader.GetString(11);
+                                    // user_account_status = reader.GetString(10);
+
+                                }
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+
             }
         }
     }

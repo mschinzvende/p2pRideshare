@@ -2,7 +2,7 @@
 @model p2pRideshare.Pages.UserProfileModel
 @{
 
-    if (Globals.logged_in_user == "")
+    if (HttpContext.Session.GetString("UserNAME") == "")
     {
         Response.Redirect("/");
     }

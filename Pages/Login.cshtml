@@ -4,7 +4,7 @@
 
     Layout = null;
 
-    if (Globals.logged_in_user != "")
+    if (HttpContext.Session.GetString("UserNAME") != "")
     {
         Response.Redirect("/Dashboard");
     }
@@ -42,6 +42,16 @@
                         <div class="mb-3 mb-lg-0">
                             <div class="alert alert-danger" role="alert">
                                 <strong>@Model.errorMessage</strong>
+                            </div>
+                        </div>
+                    </div>
+                }
+                @if (Model.successMessage.Length > 0)
+                {
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                        <div class="mb-3 mb-lg-0">
+                            <div class="alert alert-success" role="alert">
+                                <strong>@Model.successMessage</strong>
                             </div>
                         </div>
                     </div>
