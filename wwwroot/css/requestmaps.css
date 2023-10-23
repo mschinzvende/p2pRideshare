@@ -1,0 +1,34 @@
+﻿/* 
+ * Always set the map height explicitly to define the size of the div element
+ * that contains the map. 
+ */
+#reqmap {
+    height: 200px;
+}
+
+#reqdestinationmap {
+    height: 200px;
+}
+
+
+/* 
+ * Optional: Makes the sample page fill the window. 
+   
+html,
+body {
+    height: 20%;
+    margin: 0;
+    padding: 0;
+}  */
+
+
+
+
+#reqmap #infowindow-content {
+    display: inline;
+}
+
+
+#reqdestinationmap #infowindow-content {
+    display: inline;
+}
