@@ -201,11 +201,24 @@
                             <a href="/Dashboard" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Dashboard
+                                    Ride Sharing
                                     
                                 </p>
                             </a>
                              
+                        </li>
+
+
+
+                        <li class="nav-item">
+                            <a href="/RideMatches" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    Ride Matchess
+
+                                </p>
+                            </a>
+
                         </li>
 
                         @if (@httpContextAccessor.HttpContext.Session.GetString("UserPERMISSION") == "Admin")

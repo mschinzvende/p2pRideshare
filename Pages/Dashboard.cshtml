@@ -102,7 +102,8 @@
                                                                         name="pickupLocation"
                                                                        class="controls"
                                                                        type="text"
-                                                                       placeholder="Enter a location" />
+                                                                       placeholder="Enter a location"
+                                                                       />
                                                             </div>
                                                             <div id="map"></div>
                                                             <div id="infowindow-content">
@@ -118,7 +119,7 @@
 
                                                     <div class="form-group">
                                                         <label for="pickupTime">Pickup Time</label>
-                                                        <select id="pickupTime" name="pickupTime" class="form-control custom-select">
+                                                        <select id="pickupTime" name="pickupTime" class="form-control custom-select" required>
                                                             <option selected disabled>Select time</option>
 
 
@@ -146,20 +147,20 @@
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <label for="vehicleRegNo">Vehicle Reg No</label>
-                                                                <input type="text" id="vehicleRegNo" name="vehicleRegNo" class="form-control">
+                                                                <input type="text" id="vehicleRegNo" name="vehicleRegNo" class="form-control" required>
                                                             </div>
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <label for="vehicleMake">Vehicle Make</label>
-                                                                <input type="text" id="vehicleMake" name="vehicleMake" class="form-control">
+                                                                <input type="text" id="vehicleMake" name="vehicleMake" class="form-control" required>
                                                             </div>
 
                                                         </div>
                                                         <div class="col-sm-4">
                                                             <div class="form-group">
                                                                 <label for="vehicleColor">Vehicle Color</label>
-                                                                <input type="text" id="vehicleColor" name="vehicleColor" class="form-control">
+                                                                <input type="text" id="vehicleColor" name="vehicleColor" class="form-control" required>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -206,7 +207,7 @@
                                                                 <p></p>
                                                                 <div class="form-group">
                                                                     <label for="pickupThreshold">Acceptable Distance From Location</label>
-                                                        <select id="pickupThreshold" name="pickupThreshold" class="form-control custom-select">
+                                                        <select id="pickupThreshold" name="pickupThreshold" class="form-control custom-select" required>
                                                             <option selected disabled>For Pickup</option>
                                                                 <option value="0">0 Km</option>
                                                             <option value="1">1 Km</option>
@@ -224,7 +225,7 @@
                                                                 <p></p>
                                                                 <div class="form-group">
                                                                     <label for="dropoffThreshold">Acceptable Distance From Location</label>
-                                                                    <select id="dropoffThreshold" name="dropoffThreshold" class="form-control custom-select">
+                                                                    <select id="dropoffThreshold" name="dropoffThreshold" class="form-control custom-select" required>
                                                                         <option selected disabled>For Drop Off</option>
                                                                         <option value="0">0 Km</option>
                                                                         <option value="1">1 Km</option>
@@ -327,7 +328,7 @@
 
                                                     <div class="form-group">
                                                         <label for="pickupTime">Pickup Time</label>
-                                                    <select id="pickupTime" name="pickupTime" class="form-control custom-select">
+                                                    <select id="pickupTime" name="pickupTime" class="form-control custom-select" required>
                                                             <option selected disabled>Select time</option>
 
                                                                 @{
@@ -354,7 +355,7 @@
 
                                                     <div class="form-group">
                                                         <label for="extraPassengers">No. Of Extra Passengers</label>
-                                                        <input type="text" id="extraPassengers" name="extraPassengers" class="form-control">
+                                                        <input type="text" id="extraPassengers" name="extraPassengers" class="form-control" required>
                                                     </div>
                                                     </div>
                                                     </div>
@@ -397,7 +398,7 @@
                                             <div class="col-md-6">
                                         <div class="form-group">
                                             <label for="lugageDescription">Luggage Description</label>
-                                                    <input type="text" id="lugageDescription" name="lugageDescription" class="form-control">
+                                                    <input type="text" id="lugageDescription" name="lugageDescription" class="form-control" required>
                                         </div>
 
                                         </div>
@@ -405,7 +406,7 @@
                                             <div class="col-md-6">
                                                 <div class="form-group">
                                                     <label for="offerprice">Offer Price</label>
-                                                    <input type="text" id="offerprice" name="offerprice" class="form-control">
+                                                    <input type="text" id="offerprice" name="offerprice" class="form-control" required>
                                                 </div>
                                                 </div>
 

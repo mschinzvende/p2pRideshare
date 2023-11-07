@@ -11,8 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="GoogleApi" Version="5.2.4" />
+    <PackageReference Include="GoogleDistanceMatrix" Version="1.1.0" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Session" Version="2.2.0" />
     <PackageReference Include="NETCore.MailKit" Version="2.1.0" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
   </ItemGroup>
 
@@ -21,12 +25,17 @@
   </ItemGroup>
 
   <ItemGroup>
+    <_ContentIncludedByDefault Remove="Pages\RideMatches.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\UserProfile.cshtml" />
     <_ContentIncludedByDefault Remove="Pages\VerifySignUp.cshtml" />
   </ItemGroup>
 
   <ItemGroup>
     <UpToDateCheckInput Remove="Pages\UserProfile.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <UpToDateCheckInput Remove="Pages\RideMatches.cshtml" />
   </ItemGroup>
 
 </Project>

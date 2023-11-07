@@ -1,4 +1,6 @@
-﻿function initMap() {
+﻿//The function initializes the map from the Geocoder API to show on our interface for the pickup location site
+
+function initMap() {
 
     const map = new google.maps.Map(document.getElementById("map"), {
         center: { lat: -17.824858, lng: 31.053028 },
@@ -57,6 +59,10 @@
 
 initMap();
 initMapDestination();
+
+
+
+//The function initializes the map from the Geocoder API to show on our interface for the dropoff location site
 
 function initMapDestination() {
 
