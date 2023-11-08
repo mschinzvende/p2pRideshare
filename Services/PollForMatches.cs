@@ -1,0 +1,184 @@
+﻿using Microsoft.Extensions.Logging;
+using Org.BouncyCastle.Bcpg.OpenPgp;
+using p2pRideshare.DMatrixAPI;
+using p2pRideshare.Models;
+using System.Data.SqlClient;
+
+namespace p2pRideshare.Services
+{
+    public class PollForMatches : BackgroundService
+    {
+        private readonly TimeSpan _period = TimeSpan.FromSeconds(89);
+        private readonly ILogger<PollForMatches> _logger;
+
+        private static List<Offers> offersListForMatching = new List<Offers>();
+        private static List<Requests> requestsListForMatching = new List<Requests>();
+
+       
+
+        public PollForMatches(ILogger<PollForMatches> logger)
+        {
+            _logger = logger;
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            //using PeriodicTimer timer = new PeriodicTimer(_period);
+
+            //while (!stoppingToken.IsCancellationRequested)
+           // {
+                getRequests();
+                getOffers();
+                await FindMatches();
+                
+
+                //Run matching algorithm
+
+
+            
+        }
+
+        public async Task<bool> FindMatches()
+        {
+            
+            foreach (var offeritem in offersListForMatching)
+            {
+                foreach (var requestitem in requestsListForMatching)
+                {
+
+                    int PickupLocationDistance = await GetDistance(offeritem.pickupLocation, requestitem.pickupLocation);
+                    int DropOffLocationDistance = await GetDistance(offeritem.pickupDestination, requestitem.dropoffLocation);
+
+                    if (PickupLocationDistance <= Int32.Parse(offeritem.pickupThreshold))
+                    {
+                        if (DropOffLocationDistance <= Int32.Parse(offeritem.destinationThreshold))
+                        {
+                            saveMatch(Int32.Parse(requestitem.requestId), Int32.Parse(offeritem.offerId));
+                            _logger.LogInformation($"{offeritem.pickupLocation}");
+                        }
+                    }
+
+
+                }
+            }
+
+            return true;
+
+
+        }
+
+        public void saveMatch(int requestid, int offerid)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Globals.connection_string))
+                {
+                    string sql = "INSERT INTO matches (requestId, offerId, status" +
+                        " VALUES (@requestId, @offerId, @status)";
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@requestId", requestid);
+                        command.Parameters.AddWithValue("@offerId", offerid);
+                        command.Parameters.AddWithValue("@status", "Waiting");
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
+        public void getRequests()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Globals.connection_string))
+                {
+                    string sql = "SELECT requestId, pickupLocation, dropoffLocation" +
+                        " FROM rideRequests";
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Requests matchingRequest = new Requests();
+                                matchingRequest.requestId = "" + reader.GetInt32(0);
+                                matchingRequest.pickupLocation = reader.GetString(1);
+                                matchingRequest.dropoffLocation = reader.GetString(2);
+
+                                requestsListForMatching.Add(matchingRequest);
+                               
+                            }
+                        }
+                    }
+
+                    connection.Close();
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+        public void getOffers()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Globals.connection_string))
+                {
+                    string sql = "SELECT offerId, pickupLocation, finalDestination, pickupThreshold, destinationThreshold" +
+                        " FROM rideOffers";
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(sql, connection))
+                    {
+                            using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                Offers matchOffer = new Offers();
+
+                                matchOffer.offerId = ""+ reader.GetInt32(0);
+                                matchOffer.pickupLocation = reader.GetString(1);
+                                matchOffer.pickupDestination = reader.GetString(2);
+                                matchOffer.pickupThreshold = reader.GetString(3);
+                                matchOffer.destinationThreshold = reader.GetString(4);
+
+                                offersListForMatching.Add(matchOffer);
+                                
+                            }
+                        }
+                    }
+
+                    connection.Close();
+                    
+                }
+            }
+            catch (Exception ex)
+            {
+                
+            }
+        }
+
+        public async Task<int> GetDistance(string origin, string destination)
+        {
+            GoogleDistanceMatrixApi api = new GoogleDistanceMatrixApi(new[] { origin }, new[] { destination });
+            var response = await api.GetResponse();
+
+            int newdistance = response.Rows[0].Elements[0].Distance.Value;
+
+            return newdistance;
+        }
+    }
+}

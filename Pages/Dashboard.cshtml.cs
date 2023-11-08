@@ -168,12 +168,5 @@ namespace p2pRideshare.Pages
             }
         }
 
-
-
-
-        
-
-
-
     }
 }

@@ -1,5 +1,6 @@
 using p2pRideshare;
 using p2pRideshare.FileUploadService;
+using p2pRideshare.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,7 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddScoped<IFileUploadService, LocalFileUploadService>();
 builder.Services.AddSession();
 
-
+builder.Services.AddHostedService<PollForMatches>();
 builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 builder.Services.AddScoped<Globals>();
 
