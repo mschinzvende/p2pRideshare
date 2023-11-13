@@ -29,7 +29,7 @@ namespace p2pRideshare.Services
            // {
                 getRequests();
                 getOffers();
-                await FindMatches();
+                FindMatches();
                 
 
                 //Run matching algorithm
@@ -38,7 +38,7 @@ namespace p2pRideshare.Services
             
         }
 
-        public async Task<bool> FindMatches()
+        public  async Task FindMatches()
         {
             
             foreach (var offeritem in offersListForMatching)
@@ -46,8 +46,8 @@ namespace p2pRideshare.Services
                 foreach (var requestitem in requestsListForMatching)
                 {
 
-                    int PickupLocationDistance = await GetDistance(offeritem.pickupLocation, requestitem.pickupLocation);
-                    int DropOffLocationDistance = await GetDistance(offeritem.pickupDestination, requestitem.dropoffLocation);
+                    int PickupLocationDistance =  await GetDistance(offeritem.pickupLocation, requestitem.pickupLocation);
+                    int DropOffLocationDistance =  await GetDistance(offeritem.pickupDestination, requestitem.dropoffLocation);
 
                     if (PickupLocationDistance <= Int32.Parse(offeritem.pickupThreshold))
                     {
@@ -62,7 +62,7 @@ namespace p2pRideshare.Services
                 }
             }
 
-            return true;
+           
 
 
         }
