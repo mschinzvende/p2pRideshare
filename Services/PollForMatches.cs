@@ -25,13 +25,13 @@ namespace p2pRideshare.Services
         {
             //using PeriodicTimer timer = new PeriodicTimer(_period);
 
-            //while (!stoppingToken.IsCancellationRequested)
-           // {
-                getRequests();
-                getOffers();
-                FindMatches();
-                
+            while (!stoppingToken.IsCancellationRequested)
+            {
+               await getRequests();
+               await getOffers();
+               await FindMatches();
 
+            }
                 //Run matching algorithm
 
 
@@ -49,9 +49,11 @@ namespace p2pRideshare.Services
                     int PickupLocationDistance =  await GetDistance(offeritem.pickupLocation, requestitem.pickupLocation);
                     int DropOffLocationDistance =  await GetDistance(offeritem.pickupDestination, requestitem.dropoffLocation);
 
-                    if (PickupLocationDistance <= Int32.Parse(offeritem.pickupThreshold))
+
+
+                    if (PickupLocationDistance <= Int32.Parse(offeritem.pickupThreshold) *1000)
                     {
-                        if (DropOffLocationDistance <= Int32.Parse(offeritem.destinationThreshold))
+                        if (DropOffLocationDistance <= Int32.Parse(offeritem.destinationThreshold)*1000)
                         {
                             saveMatch(Int32.Parse(requestitem.requestId), Int32.Parse(offeritem.offerId));
                             _logger.LogInformation($"{offeritem.pickupLocation}");
@@ -73,7 +75,7 @@ namespace p2pRideshare.Services
             {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
-                    string sql = "INSERT INTO matches (requestId, offerId, status" +
+                    string sql = "INSERT INTO matches (requestId, offerId, status)" +
                         " VALUES (@requestId, @offerId, @status)";
                     connection.Open();
 
@@ -94,7 +96,7 @@ namespace p2pRideshare.Services
 
             }
         }
-        public void getRequests()
+        public async Task getRequests()
         {
             try
             {
@@ -131,7 +133,7 @@ namespace p2pRideshare.Services
             }
         }
 
-        public void getOffers()
+        public async Task getOffers()
         {
             try
             {
@@ -175,6 +177,7 @@ namespace p2pRideshare.Services
         {
             GoogleDistanceMatrixApi api = new GoogleDistanceMatrixApi(new[] { origin }, new[] { destination });
             var response = await api.GetResponse();
+            
 
             int newdistance = response.Rows[0].Elements[0].Distance.Value;
 
