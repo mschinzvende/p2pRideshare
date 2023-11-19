@@ -1,0 +1,63 @@
+﻿@page
+@model p2pRideshare.Pages.RideRequestsModel
+@{
+}
+<div class="row">
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-6">
+                    <h1>Available Passengers</h1>
+                </div>
+                <div class="col-sm-6 d-none d-sm-block">
+                    <ol class="breadcrumb float-sm-right">
+                        <li class="breadcrumb-item"><a href="/">Home</a></li>
+                        <li class="breadcrumb-item active">Ride Requests</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="content pb-3">
+        <div class="container-fluid">
+        <div class="row">
+
+                    @foreach (var item in Model.MatchedRequestsList)
+                    {
+                        <div class="col-sm-4">
+
+                            <div class="our-team">
+                                <div class="picture">
+                                    <img class="img-fluid" src="~/mugshots/@item.profilePic">
+                                </div>
+                                <div class="team-content">
+                                    <p>MatchID: @item.matchId</p>
+                                    <p>@item.fullName - @item.idNo</p>
+                                    Offer Price: $@item.offerPrice
+                                    <p>Pickup: @item.pickupLocation</p>
+                                    <p>Destination: @item.dropoffLocation</p>
+
+                                    <p>Date: @item.pickupDate | Time: @item.pickupTime</p>
+                                    <p>Extra Passengers: @item.extraPassengers | Lagguage: @item.laguageDescription</p>
+
+
+                                </div>
+                                <ul class="social">
+                                    <li><a href="/PassengerBookings?matchId=@item.matchId&action=Accept" class="fa fa-facebook" aria-hidden="true">ACCEPT</a></li>
+                                    <li><a href="/PassengerBookings?matchId=@item.matchId&action=Reject" class="fa fa-twitter" aria-hidden="true">REJECT</a></li>
+                                    
+                                </ul>
+                            </div>
+
+                        </div>
+                    }
+
+
+        </div>
+        </div>
+    </section>
+</div>
+</div>

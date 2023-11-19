@@ -1,0 +1,118 @@
+﻿@page
+@model p2pRideshare.Pages.PassengerBookingsModel
+@{
+}
+<div class="row">
+    <!-- Content Wrapper. Contains page content -->
+    <div class="content-wrapper">
+        <section class="content-header">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-6">
+                        <h1>My Ride Bookings</h1>
+                    </div>
+                    <div class="col-sm-6 d-none d-sm-block">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item"><a href="/">Home</a></li>
+                            <li class="breadcrumb-item active">Ride Requests</li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="content pb-3">
+            <div class="container-fluid">
+                <div class="row">
+
+                    @foreach (var item in Model.MatchedRequestsList)
+                    {
+                        <div class="col-sm-4">
+
+                            <div class="our-team">
+                                @if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
+                                {
+                                    <div class="mb-3 mb-lg-0">
+                                        <div class="alert alert-success" role="alert">
+                                            <strong>Passenger Confirmed</strong>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="mb-3 mb-lg-0">
+                                        <div class="alert alert-danger" role="alert">
+                                            <strong>Waiting Passenger Confirmation</strong>
+                                        </div>
+                                    </div>
+                                }
+
+                              
+                                <div class="picture">
+                                    <img class="img-fluid" src="~/mugshots/@item.profilePic">
+                                </div>
+                                <div class="team-content">
+                                    <p>@item.fullName - @item.idNo</p>
+                                    Offer Price: $@item.offerPrice
+                                    <p>Pickup: @item.pickupLocation</p>
+                                    <p>Destination: @item.dropoffLocation</p>
+
+                                    <p>Date: @item.pickupDate | Time: @item.pickupTime</p>
+                                    <p>Extra Passengers: @item.extraPassengers | Lagguage: @item.laguageDescription</p>
+
+                                    <p> Phone:@if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
+                                        {
+                                            @item.phone
+                                        }
+                                        else
+                                        {
+                                            <b>Waiting passenger confirmation</b>
+                                        }
+                                        
+                                    </p>
+
+                                    <p>
+                                        Email:@if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
+                                        {
+                                            @item.email
+                                        }
+
+                                        else
+                                        {
+                                            <b>Waiting passenger confirmation</b>
+                                        }
+                                    </p>
+                                    
+
+
+
+                                </div>
+                                <ul class="social">
+
+
+
+
+                                    @if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
+                                    {
+                                        <li><a href="https://wa.me/263@item.phone" class="fa fa-facebook" aria-hidden="true">Whats App</a></li>
+                                        <li><a href="" class="fa fa-twitter" aria-hidden="true">CALL</a></li>
+
+                                    }
+                                    else
+                                    {
+                                        <li><a href="#" class="fa fa-facebook" aria-hidden="true">Pending</a></li>
+                                        <li><a href="#" class="fa fa-twitter" aria-hidden="true">Pending</a></li>
+                                    }
+                                    
+                                </ul>
+                            </div>
+
+                        </div>
+                    }
+
+
+                </div>
+            </div>
+        </section>
+    </div>
+</div>

@@ -40,30 +40,36 @@ namespace p2pRideshare.Services
 
         public  async Task FindMatches()
         {
-            
-            foreach (var offeritem in offersListForMatching)
+            try
             {
-                foreach (var requestitem in requestsListForMatching)
+
+                foreach (var offeritem in offersListForMatching)
                 {
-
-                    int PickupLocationDistance =  await GetDistance(offeritem.pickupLocation, requestitem.pickupLocation);
-                    int DropOffLocationDistance =  await GetDistance(offeritem.pickupDestination, requestitem.dropoffLocation);
-
-
-
-                    if (PickupLocationDistance <= Int32.Parse(offeritem.pickupThreshold) *1000)
+                    foreach (var requestitem in requestsListForMatching)
                     {
-                        if (DropOffLocationDistance <= Int32.Parse(offeritem.destinationThreshold)*1000)
+
+                        int PickupLocationDistance = await GetDistance(offeritem.pickupLocation, requestitem.pickupLocation);
+                        int DropOffLocationDistance = await GetDistance(offeritem.pickupDestination, requestitem.dropoffLocation);
+
+
+
+                        if (PickupLocationDistance <= Int32.Parse(offeritem.pickupThreshold) * 1000)
                         {
-                            saveMatch(Int32.Parse(requestitem.requestId), Int32.Parse(offeritem.offerId));
-                            _logger.LogInformation($"{offeritem.pickupLocation}");
+                            if (DropOffLocationDistance <= Int32.Parse(offeritem.destinationThreshold) * 1000)
+                            {
+                                saveMatch(Int32.Parse(requestitem.requestId), Int32.Parse(offeritem.offerId));
+                                _logger.LogInformation($"{offeritem.pickupLocation}");
+                            }
                         }
+
+
                     }
-
-
                 }
             }
+            catch (Exception ex)
+            {
 
+            }
            
 
 
@@ -75,15 +81,16 @@ namespace p2pRideshare.Services
             {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
-                    string sql = "INSERT INTO matches (requestId, offerId, status)" +
-                        " VALUES (@requestId, @offerId, @status)";
+                    string sql = "INSERT INTO matches (requestId, offerId, driverStatus, passengerStatus)" +
+                        " VALUES (@requestId, @offerId, @driverstatus, @passengerstatus)";
                     connection.Open();
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
                         command.Parameters.AddWithValue("@requestId", requestid);
                         command.Parameters.AddWithValue("@offerId", offerid);
-                        command.Parameters.AddWithValue("@status", "Waiting");
+                        command.Parameters.AddWithValue("@driverstatus", "Waiting");
+                        command.Parameters.AddWithValue("@passengerstatus", "Waiting");
 
                         command.ExecuteNonQuery();
                     }

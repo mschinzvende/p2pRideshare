@@ -26,6 +26,10 @@
 
     <link rel="stylesheet" type="text/css" href="~/css/requestmaps.css" />
     <script type="module" src="~/js/requestmaps.js"></script>
+
+    <link rel="stylesheet" type="text/css" href="~/css/usercard.css" />
+
+
 </head>
 <body class="hold-transition sidebar-mini">
     <!-- Site wrapper -->
@@ -208,18 +212,78 @@
                              
                         </li>
 
-
-
+                        
                         <li class="nav-item">
-                            <a href="/RideMatches" class="nav-link">
+                            <a href="#" class="nav-link">
                                 <i class="nav-icon fas fa-tachometer-alt"></i>
                                 <p>
-                                    Ride Matchess
+                                    My Rides
+
+                                </p>
+                            </a>
+                        <li class="nav-item">
+                            <a href="/RideOffers" class="nav-link">
+                                
+                                <i class="nav-icon fas fa-arrow-right-long"></i>
+                                <p>
+                                    My Ride Offers
 
                                 </p>
                             </a>
 
                         </li>
+
+                        <li class="nav-item">
+                            <a href="/RideOffers" class="nav-link">
+
+                                <i class="nav-icon fas fa-arrow-right-long"></i>
+                                <p>
+                                    Accepted Ride Offers
+
+                                </p>
+                            </a>
+
+                        </li>
+
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="#" class="nav-link">
+                                <i class="nav-icon fas fa-tachometer-alt"></i>
+                                <p>
+                                    My Passengers
+
+                                </p>
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/RideRequests" class="nav-link">
+
+                                <i class="nav-icon fas fa-arrow-right-long"></i>
+                                <p>
+                                    My Passenger Requests
+
+                                </p>
+                            </a>
+
+                        </li>
+
+                        <li class="nav-item">
+                            <a href="/PassengerBookings" class="nav-link">
+
+                                <i class="nav-icon fas fa-arrow-right-long"></i>
+                                <p>
+                                    My Passenger Bookings
+
+                                </p>
+                            </a>
+
+                        </li>
+
+
+
 
                         @if (@httpContextAccessor.HttpContext.Session.GetString("UserPERMISSION") == "Admin")
                         {
