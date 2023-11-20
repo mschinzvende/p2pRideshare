@@ -157,7 +157,7 @@ namespace p2pRideshare.Pages
                     string request_sql = "SELECT o.userId, o.pickupLocation, o.finalDestination, o.pickupTime, o.pickupDate, " +
                         "o.vehicleRegNo, o.vehicleMake, o.vehicleColor, o.picDriversLicense, o.picZinaraReg, matches.matchId FROM rideOffers AS o JOIN matches ON o.offerId=matches.offerId " +
                         "JOIN rideRequests ON rideRequests.requestId=matches.requestId JOIN users ON rideRequests.userId=users.userId " +
-                        "WHERE rideRequests.userId=@current_user AND matches.driverStatus='Waiting' ";
+                        "WHERE rideRequests.userId=@current_user AND matches.driverStatus='Accepted' ";
 
                     connection.Open();
 
