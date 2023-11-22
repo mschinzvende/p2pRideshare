@@ -102,8 +102,7 @@
                                                                         name="pickupLocation"
                                                                        class="controls"
                                                                        type="text"
-                                                                       placeholder="Enter a location"
-                                                                       />
+                                                                       placeholder="Enter a location" required/>
                                                             </div>
                                                             <div id="map"></div>
                                                             <div id="infowindow-content">
@@ -187,7 +186,7 @@
                                                                    name="destinationLocation"
                                                                    class="controls"
                                                                    type="text"
-                                                                   placeholder="Enter a location" />
+                                                                   placeholder="Enter a location" required/>
                                                         </div>
                                                         <div id="destinationmap"></div>
                                                         <div id="infowindow-content">
@@ -208,7 +207,7 @@
                                                                 <div class="form-group">
                                                                     <label for="pickupThreshold">Acceptable Distance From Location</label>
                                                         <select id="pickupThreshold" name="pickupThreshold" class="form-control custom-select" required>
-                                                            <option selected disabled>For Pickup</option>
+                                                            <option value="0" selected disabled>For Pickup</option>
                                                                 <option value="0">0 Km</option>
                                                             <option value="1">1 Km</option>
                                                              <option value="2">2 Km</option>
@@ -226,7 +225,7 @@
                                                                 <div class="form-group">
                                                                     <label for="dropoffThreshold">Acceptable Distance From Location</label>
                                                                     <select id="dropoffThreshold" name="dropoffThreshold" class="form-control custom-select" required>
-                                                                        <option selected disabled>For Drop Off</option>
+                                                                        <option value="0" selected disabled>For Drop Off</option>
                                                                         <option value="0">0 Km</option>
                                                                         <option value="1">1 Km</option>
                                                                         <option value="2">2 Km</option>
@@ -308,7 +307,7 @@
                                                        name="requestpickuplocation"
                                                        class="controls"
                                                        type="text"
-                                                       placeholder="Enter a location" />
+                                                       placeholder="Enter a location" required/>
                                             </div>
                                             <div id="reqmap"></div>
                                             <div id="infowindow-content">
@@ -378,7 +377,7 @@
                                                        name="reqdestinationLocation"
                                                        class="controls"
                                                        type="text"
-                                                       placeholder="Enter a location" />
+                                                       placeholder="Enter a location" required/>
                                             </div>
                                             <div id="reqdestinationmap"></div>
                                             <div id="infowindow-content">

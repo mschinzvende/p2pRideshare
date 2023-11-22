@@ -2,21 +2,42 @@
 @model p2pRideshare.Pages.RideRequestsModel
 @{
 }
-<div class="row">
-<!-- Content Wrapper. Contains page content -->
-<div class="content-wrapper">
+
+
+    <!-- Content Wrapper. Contains page content-->
+    <div class="content-wrapper">
     <section class="content-header">
         <div class="container-fluid">
+
+                @if (Model.errorMessage.Length > 0)
+                {
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                        <div class="mb-3 mb-lg-0">
+                            <div class="alert alert-danger" role="alert">
+                                <strong>@Model.errorMessage</strong>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+                @if (Model.successMessage.Length > 0)
+                {
+                    <div class="d-flex justify-content-between w-100 flex-wrap">
+                        <div class="mb-3 mb-lg-0">
+                            <div class="alert alert-success" role="alert">
+                                <strong>@Model.successMessage</strong>
+                            </div>
+                        </div>
+                    </div>
+                }
+
+
+
             <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-12">
                     <h1>Available Passengers</h1>
                 </div>
-                <div class="col-sm-6 d-none d-sm-block">
-                    <ol class="breadcrumb float-sm-right">
-                        <li class="breadcrumb-item"><a href="/">Home</a></li>
-                        <li class="breadcrumb-item active">Ride Requests</li>
-                    </ol>
-                </div>
+                
             </div>
         </div>
     </section>
@@ -24,7 +45,8 @@
     <section class="content pb-3">
         <div class="container-fluid">
         <div class="row">
-
+                    
+                    
                     @foreach (var item in Model.MatchedRequestsList)
                     {
                         <div class="col-sm-4">
@@ -59,5 +81,4 @@
         </div>
         </div>
     </section>
-</div>
-</div>
+    </div>

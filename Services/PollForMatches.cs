@@ -65,9 +65,9 @@ namespace p2pRideshare.Services
 
                     }
                 }
-            }
-            catch (Exception ex)
-            {
+          }
+           catch (Exception ex)
+           {
 
             }
            
@@ -81,8 +81,8 @@ namespace p2pRideshare.Services
             {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
-                    string sql = "INSERT INTO matches (requestId, offerId, driverStatus, passengerStatus)" +
-                        " VALUES (@requestId, @offerId, @driverstatus, @passengerstatus)";
+                    string sql = "INSERT INTO matches (requestId, offerId, driverStatus, passengerStatus, matchIdentifier)" +
+                        " VALUES (@requestId, @offerId, @driverstatus, @passengerstatus, @matchIdentifier)";
                     connection.Open();
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
@@ -92,12 +92,15 @@ namespace p2pRideshare.Services
                         command.Parameters.AddWithValue("@driverstatus", "Waiting");
                         command.Parameters.AddWithValue("@passengerstatus", "Waiting");
 
+                        int identityTotal = requestid + offerid;
+                        command.Parameters.AddWithValue("@matchIdentifier", "" + identityTotal);
+
                         command.ExecuteNonQuery();
                     }
 
                     connection.Close();
                 }
-            }
+           }
             catch (Exception ex)
             {
 
@@ -143,7 +146,7 @@ namespace p2pRideshare.Services
         public async Task getOffers()
         {
             try
-            {
+           {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
                     string sql = "SELECT offerId, pickupLocation, finalDestination, pickupThreshold, destinationThreshold" +

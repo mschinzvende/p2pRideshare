@@ -7,8 +7,8 @@ namespace p2pRideshare.Pages
 {
     public class RideOffersModel : PageModel
     {
-        string successMessage = "";
-        string errorMessage = "";
+       public  string successMessage = "";
+        public string errorMessage = "";
 
         public List<MatchedOffers> MatchedOffersList = new List<MatchedOffers>();
         MatchedOffers matchedOffer = new MatchedOffers();

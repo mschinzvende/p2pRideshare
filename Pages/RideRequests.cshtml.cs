@@ -11,8 +11,8 @@ namespace p2pRideshare.Pages
 {
     public class RideRequestsModel : PageModel
     {
-        string successMessage = "";
-        string errorMessage = "";
+        public string successMessage = "";
+        public string errorMessage = "";
 
         public List<MatchedRequest> MatchedRequestsList = new List<MatchedRequest>();
         MatchedRequest matchedRequest = new MatchedRequest();

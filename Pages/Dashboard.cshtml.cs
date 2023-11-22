@@ -6,6 +6,7 @@ using p2pRideshare.Models;
 using System.Data.SqlClient;
 using Newtonsoft.Json;
 using System.Web.Mvc;
+using Org.BouncyCastle.Security;
 
 namespace p2pRideshare.Pages
 {
@@ -87,6 +88,9 @@ namespace p2pRideshare.Pages
 
                     }
                     connection.Close();
+
+                    successMessage = "Request Submitted Successfully. Driver matches will show below. Kindly wait for a match";
+                    Response.Redirect("/RideOffers?successMessage=" + successMessage);
                 }
             }
             catch (Exception ex)
@@ -158,6 +162,9 @@ namespace p2pRideshare.Pages
                     }
 
                     connection.Close();
+
+                    successMessage = "Offer Submitted Successfully. Passenger matches will show below. Kindly wait for a match";
+                    Response.Redirect("/RideRequests?successMessage=" + successMessage);
                 }
 
                 }
