@@ -58,7 +58,7 @@ namespace p2pRideshare.Pages
             request.extraPassengers = Request.Form["extraPassengers"];
             request.offerPrice = Request.Form["offerprice"];
             request.pickupTime = Request.Form["pickupTime"];
-            request.pickupDate = Request.Form["pickupDate"];
+            request.pickupDate = DateTime.Today.ToString();
 
 
             try
