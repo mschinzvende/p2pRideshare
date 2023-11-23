@@ -8,7 +8,7 @@ namespace p2pRideshare.Services
 {
     public class PollForMatches : BackgroundService
     {
-        private readonly TimeSpan _period = TimeSpan.FromSeconds(89);
+        //private readonly TimeSpan _period = TimeSpan.FromSeconds(89);
         private readonly ILogger<PollForMatches> _logger;
 
         private static List<Offers> offersListForMatching = new List<Offers>();

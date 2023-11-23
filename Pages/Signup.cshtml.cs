@@ -103,7 +103,9 @@ namespace p2pRideshare.Pages
 
             catch (Exception ex)
             {
-                errorMessage = ex.Message;
+                errorMessage = "That email is already registered";
+
+                
             }
    
         }
