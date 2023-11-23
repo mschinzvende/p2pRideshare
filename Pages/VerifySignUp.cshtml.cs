@@ -69,13 +69,13 @@ namespace p2pRideshare.Pages
             if (!string.IsNullOrEmpty(Request.Query["userId"]))
             {
                 string natID = Request.Query["userId"];
-                 sql = "SELECT * FROM users WHERE idNo='"+natID+"'";
+                 sql = "SELECT * FROM users WHERE idNo='"+natID+ "' AND userType='General User'";
 
             }
 
             else
             {
-                sql = "SELECT * FROM users";
+                sql = "SELECT * FROM users WHERE userType='General User'";
             }
 
             if (!string.IsNullOrEmpty(Request.Query["verifAction"]))
