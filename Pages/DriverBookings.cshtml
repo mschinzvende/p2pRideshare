@@ -1,6 +1,8 @@
 ﻿@page
 @model p2pRideshare.Pages.DriverBookingsModel
 @{
+    string userID = "";
+    string matchID = "";
 }
 
 
@@ -35,6 +37,7 @@
                                         <div class="alert alert-success" role="alert">
                                             <strong>Driver Confirmed</strong>
                                         </div>
+
                                     </div>
                                 }
                                 else
@@ -51,7 +54,27 @@
                                     <img class="img-fluid" src="~/mugshots/@item.profilePic">
                                 </div>
                                 <div class="team-content">
-                                    <p>@item.fullName - @item.idNo</p>
+
+                                @if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
+                                {
+                                    @if (item.driverRated == "No")
+                                    {
+                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ratingModal">
+                                            Rate this driver
+                                        </button>
+
+                                        userID = item.userId;
+                                        matchID = item.matchId;
+                                    }
+
+                                    @if (item.driverRated == "Yes")
+                                    {
+                                        <button type="button" class="btn btn-default">
+                                            You have rated this driver
+                                        </button>
+                                    }
+                                }
+                                <p>@item.fullName - @item.idNo</p>
 
                                     <p>Pickup: @item.pickupLocation</p>
                                     <p>Destination: @item.finalDestination</p>
@@ -84,6 +107,7 @@
                                         Email:@if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
                                         {
                                             @item.email
+                                        
                                         }
 
                                         else
@@ -125,3 +149,74 @@
             </div>
         </section>
     </div>
+
+
+<div class="modal fade" id="ratingModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Rate this driver</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" enctype="multipart/form-data" asp-page-handler="rateuser">
+            <div class="modal-body">
+               
+                <input type="hidden" id="theuser_id" name="theuser_id" value="@userID" />
+                    <input type="hidden" id="thematch_id" name="thematch_id" value="@matchID" />
+
+                    <div class="form-group">
+                        <label >Select your rating out of 5</label>
+                        <div class="row">
+
+                            <div class="col">
+                        <div class="custom-control custom-radio">
+                            <input class="custom-control-input" type="radio" id="customRadio1" name="customRadio" value="1" checked>
+                            <label for="customRadio1" class="custom-control-label">1 Point</label>
+                          
+                        </div>
+                            </div>
+                            <div class="col">
+                        <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="customRadio2" name="customRadio" value="2">
+                            <label for="customRadio2" class="custom-control-label">2 Points</label>
+
+                        </div>
+                        </div>
+                            <div class="col">
+                        <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="customRadio3" name="customRadio" value="3">
+                            <label for="customRadio3" class="custom-control-label">3 Points</label>
+
+                        </div>
+                        </div>
+
+                            <div class="col">
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="customRadio4" name="customRadio" value="4">
+                                    <label for="customRadio4" class="custom-control-label">4 Points</label>
+
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="custom-control custom-radio">
+                                    <input class="custom-control-input" type="radio" id="customRadio5" name="customRadio" value="5">
+                                    <label for="customRadio5" class="custom-control-label">5 Points</label>
+
+                                </div>
+                            </div>
+                        </div>
+                     </div>
+                
+            </div>
+            <div class="modal-footer justify-content-between">
+                 
+                <button type="submit" class="btn btn-primary">Submit Rating</button>
+            </div>
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

@@ -13,6 +13,11 @@
     <!-- Theme style -->
     <link rel="stylesheet" href="~/dist/css/adminlte.min.css">
 
+    <!-- jQuery -->
+    <script src="~/plugins/jquery/jquery.min.js"></script>
+    <!-- Bootstrap 4 -->
+    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDRp9Ck6fKu00mDVSeg05F26SN4k3qvD4k&callback=initMap&libraries=places&v=weekly"
             defer></script>
 
@@ -20,12 +25,15 @@
             defer></script>
 
     <script src="https://polyfill.io/v3/polyfill.min.js?features=default"></script>
+   
 
     <link rel="stylesheet" type="text/css" href="~/css/mapforlocations.css" />
     <script type="module" src="~/js/mapforlocations.js"></script>
 
     <link rel="stylesheet" type="text/css" href="~/css/requestmaps.css" />
     <script type="module" src="~/js/requestmaps.js"></script>
+
+    <script src="~/dist/js/adminlte.min.js"></script>
 
     <link rel="stylesheet" type="text/css" href="~/css/usercard.css" />
 
@@ -344,14 +352,7 @@
     <!-- /.control-sidebar -->
     </div>
     <!-- ./wrapper -->
-    <!-- jQuery -->
-    <script src="~/plugins/jquery/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- AdminLTE App -->
-    <script src="~/dist/js/adminlte.min.js"></script>
-    <!-- AdminLTE for demo purposes 
-    <script src="~/dist/js/demo.js"></script> -->
+   
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

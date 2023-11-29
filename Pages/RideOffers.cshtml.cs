@@ -60,6 +60,7 @@ namespace p2pRideshare.Pages
                                 matchedOffer.phone = reader.GetString(5);
                                 matchedOffer.email = reader.GetString(6);
                                 matchedOffer.physicalAddress = reader.GetString(7);
+                                matchedOffer.rating = ""+reader.GetInt32(13);
                             }
                         }
                     }

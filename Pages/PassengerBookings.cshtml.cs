@@ -135,6 +135,7 @@ namespace p2pRideshare.Pages
                                 matchedRequest.phone = reader.GetString(5);
                                 matchedRequest.email = reader.GetString(6);
                                 matchedRequest.physicalAddress = reader.GetString(7);
+                                matchedRequest.userID = "" + reader.GetInt32(0);
                             }
                         }
                     }
@@ -148,7 +149,47 @@ namespace p2pRideshare.Pages
                 errorMessage = ex.Message;
             }
         }
+        public void OnPostRateuser()
+        {
 
+            string userID = Request.Form["theuser_id"];
+            string matchID = Request.Form["thematch_id"];
+            int rating = Int32.Parse(Request.Form["customRadio"]);
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Globals.connection_string))
+                {
+                    string user_sql = "UPDATE users SET rating=rating+@newRating WHERE userId=@userId";
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(user_sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userID);
+                        command.Parameters.AddWithValue("@newRating", rating);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    user_sql = "UPDATE matches SET passengerRated=@passengerRated WHERE matchId=@matchID";
+                    using (SqlCommand command = new SqlCommand(user_sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@matchID", matchID);
+                        command.Parameters.AddWithValue("@passengerRated", "Yes");
+
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    connection.Close();
+
+                    Response.Redirect("/PassengerBookings");
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+            }
+        }
         public void getMatchingRequests()
         {
             try
@@ -156,7 +197,7 @@ namespace p2pRideshare.Pages
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
                     string request_sql = "SELECT r.userId, r.pickupLocation, r.dropoffLocation, r.laguageDescription, r.extraPassengers, " +
-                        "r.offerPrice, r.pickupTime, r.pickupDate, matches.passengerStatus, matches.driverStatus FROM rideRequests AS r JOIN matches ON r.requestId=matches.requestId " +
+                        "r.offerPrice, r.pickupTime, r.pickupDate, matches.matchId, matches.passengerStatus, matches.driverStatus, matches.passengerRated, matches.driverRated FROM rideRequests AS r JOIN matches ON r.requestId=matches.requestId " +
                         "JOIN rideOffers ON rideOffers.offerId=matches.offerId JOIN users ON rideOffers.userId=users.userId " +
                         "WHERE rideOffers.userId=@current_user AND matches.passengerStatus='Accepted' ";
 
@@ -178,8 +219,11 @@ namespace p2pRideshare.Pages
                                 matchedRequest.offerPrice = reader.GetString(5);
                                 matchedRequest.pickupTime = reader.GetString(6);
                                 matchedRequest.pickupDate = reader.GetString(7);
-                                matchedRequest.passengerStatus = reader.GetString(8);
-                                matchedRequest.driverStatus = reader.GetString(9);
+                                matchedRequest.matchId = "" + reader.GetInt32(8);
+                                matchedRequest.passengerStatus = reader.GetString(9);
+                                matchedRequest.driverStatus = reader.GetString(10);
+                                matchedRequest.passengerRated = reader.GetString(11);
+                                matchedRequest.driverRated = reader.GetString(12);
                                 getPassengerDetails("" + reader.GetInt32(0));
 
                                 MatchedRequestsList.Add(matchedRequest);

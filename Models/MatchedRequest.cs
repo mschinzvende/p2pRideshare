@@ -9,6 +9,8 @@
         public string phone = "";
         public string email = "";
         public string physicalAddress = "";
+        public string userID = "";
+        public string rating = "";
 
         public string pickupLocation = "";
         public string dropoffLocation = "";
@@ -21,5 +23,7 @@
         public string matchId = "";
         public string passengerStatus = "";
         public string driverStatus = "";
+        public string passengerRated = "";
+        public string driverRated = "";
     }
 }

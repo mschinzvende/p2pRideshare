@@ -81,8 +81,8 @@ namespace p2pRideshare.Services
             {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
-                    string sql = "INSERT INTO matches (requestId, offerId, driverStatus, passengerStatus, matchIdentifier)" +
-                        " VALUES (@requestId, @offerId, @driverstatus, @passengerstatus, @matchIdentifier)";
+                    string sql = "INSERT INTO matches (requestId, offerId, driverStatus, passengerStatus, matchIdentifier, passengerRated, driverRated)" +
+                        " VALUES (@requestId, @offerId, @driverstatus, @passengerstatus, @matchIdentifier, @passengerRated, @driverRated)";
                     connection.Open();
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
@@ -91,6 +91,8 @@ namespace p2pRideshare.Services
                         command.Parameters.AddWithValue("@offerId", offerid);
                         command.Parameters.AddWithValue("@driverstatus", "Waiting");
                         command.Parameters.AddWithValue("@passengerstatus", "Waiting");
+                        command.Parameters.AddWithValue("@passengerRated", "No");
+                        command.Parameters.AddWithValue("@driverRated", "No");
 
                         int identityTotal = requestid + offerid;
                         command.Parameters.AddWithValue("@matchIdentifier", "" + identityTotal);

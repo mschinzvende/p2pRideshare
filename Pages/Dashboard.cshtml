@@ -7,10 +7,6 @@
     }
 }
 
-
-
-
-
 <!--<div class="row mb-2">
     <div class="col-12">-->
             <!-- Content Wrapper. Contains page content -->
@@ -115,33 +111,53 @@
                                                     <!--Google Maps END Code-->
                                                         </div>
                                                     
-
-                                                    <div class="form-group">
-                                                        <label for="pickupTime">Pickup Time</label>
-                                                        <select id="pickupTime" name="pickupTime" class="form-control custom-select" required>
-                                                            <option selected disabled>Select time</option>
-
-
-                                                            @{
-                                                                string startTime = DateTime.Now.ToString("HH:mm tt");
-                                                                string endTime = "6:30 PM";
-                                                                TimeSpan interval = new TimeSpan(0, 30, 0);
-
-                                                                while (DateTime.Parse(startTime) <= DateTime.Parse(endTime))
-                                                                    {
-                                                                        <option>@startTime</option>
-
-                                                                        startTime = DateTime.Parse(startTime).Add(interval).ToString("HH:mm tt");
-                                                                    }
-                                                              }
+                                                        <div class="row">
+                                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="pickupTime">Pickup Time</label>
+                                                    <select id="pickupTime" name="pickupTime" class="form-control custom-select" required>
+                                                        <option selected disabled>Select time</option>
 
 
+                                                        @{
+                                                            string startTime = "6:30 AM";
+                                                            string endTime = "6:30 PM";
+                                                            TimeSpan interval = new TimeSpan(0, 30, 0);
 
-                                                        </select>
+                                                            while (DateTime.Parse(startTime) <= DateTime.Parse(endTime))
+                                                            {
+                                                                <option>@startTime</option>
+
+                                                                startTime = DateTime.Parse(startTime).Add(interval).ToString("HH:mm tt");
+                                                            }
+                                                        }
+
+
+
+                                                    </select>
+                                                </div>
+
+                                                            </div>
+
+                                                            <div class="col-sm-6">
+                                                <div class="form-group">
+
+                                                    <label>Date:</label>
+                                                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
+                                                        <input type="text" class="form-control datetimepicker-input" name="reservationdate" data-target="#reservationdate" required />
+                                                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                        </div>
                                                     </div>
-                                        
-                                        
+
+                                                </div>
+                                                            </div>
+                                                        </div>
+                                                   
+
+
                                        
+                                        
                                                     <div class="row">
 
                                                         <div class="col-sm-4">
@@ -206,9 +222,9 @@
 
                                                                 <p></p>
                                                                 <div class="form-group">
-                                                                    <label for="pickupThreshold">Acceptable Distance From Location</label>
+                                                                    <label for="pickupThreshold">Pickup Threshold</label>
                                                         <select id="pickupThreshold" name="pickupThreshold" class="form-control custom-select" required>
-                                                            <option value="0" selected disabled>For Pickup</option>
+                                                            
                                                                 <option value="0">0 Km</option>
                                                             <option value="1">1 Km</option>
                                                              <option value="2">2 Km</option>
@@ -220,13 +236,12 @@
                                                             </div>
                                                             </div>
 
-
                                                             <div class="col-sm-6">
                                                                 <p></p>
                                                                 <div class="form-group">
-                                                                    <label for="dropoffThreshold">Acceptable Distance From Location</label>
+                                                                    <label for="dropoffThreshold">Destination Threshold</label>
                                                                     <select id="dropoffThreshold" name="dropoffThreshold" class="form-control custom-select" required>
-                                                                        <option value="0" selected disabled>For Drop Off</option>
+                                                                        
                                                                         <option value="0">0 Km</option>
                                                                         <option value="1">1 Km</option>
                                                                         <option value="2">2 Km</option>
@@ -238,11 +253,7 @@
                                                                 </div>
                                                             </div>
                                
-
-
                                                             </div>
-
-
 
                                                         <div class="row">
                                                             
@@ -332,13 +343,13 @@
                                                             <option selected disabled>Select time</option>
 
                                                                 @{
-                                                                    string reqstartTime = DateTime.Now.ToString("HH:mm tt");
+                                                            string reqstartTime = "6:30 AM";
                                                                     string reqendTime = "6:30 PM";
                                                                     TimeSpan reqinterval = new TimeSpan(0, 30, 0);
 
                                                                     while (DateTime.Parse(reqstartTime) <= DateTime.Parse(reqendTime))
                                                                     {
-                                                                            <option>@reqstartTime</option>
+                                                                                <option>@reqstartTime</option>
 
                                                                             reqstartTime = DateTime.Parse(reqstartTime).Add(reqinterval).ToString("HH:mm tt");
                                                                     }
@@ -358,6 +369,22 @@
                                                         <input type="text" id="extraPassengers" name="extraPassengers" class="form-control" required>
                                                     </div>
                                                     </div>
+                                                    </div>
+
+                                                    <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+
+                                                    <label>Date:</label>
+                                                    <div class="input-group date" id="reservationdate" n data-target-input="nearest">
+                                                        <input type="text" class="form-control datetimepicker-input" name="reservationdate" data-target="#reservationdate" required />
+                                                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
+                                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
                                                     </div>
                                                     
 
@@ -422,6 +449,10 @@
 
                                                 </div>
                                                 </div>
+
+
+
+
                             </form>
                                             </div>
                                            <!--End Request Ride tab Tab-->
@@ -449,12 +480,18 @@
             <!--End Section-->
 
        </div>
- 
+
+<!-- jQuery -->
 
 
 
 <script>
-
+    //Date picker
+    $(function () {
+        $('#reservationdate').datetimepicker({
+            format: 'L'
+        });
+    })
 
         function previewLicense() {
             licenseFrame.src = URL.createObjectURL(event.target.files[0]);
@@ -463,5 +500,5 @@
     function previewZinara() {
         zinaraFrame.src = URL.createObjectURL(event.target.files[0]);
     }
-</script>
 
+</script>

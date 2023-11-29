@@ -61,8 +61,8 @@ namespace p2pRideshare.Pages
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
                     connection.Open();
-                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus, userType, aiVerification)" +
-                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus, @userType, @aiVerification)";
+                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus, userType, aiVerification, rating)" +
+                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus, @userType, @aiVerification, @rating)";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -78,6 +78,7 @@ namespace p2pRideshare.Pages
                         command.Parameters.AddWithValue("@accountStatus", user.accountStatus);
                         command.Parameters.AddWithValue("@userType", user.userType);
                         command.Parameters.AddWithValue("@aiVerification", user.aiVerification);
+                        command.Parameters.AddWithValue("@rating",0);
 
                         command.ExecuteNonQuery();
                     }
