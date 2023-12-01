@@ -7,6 +7,7 @@ using p2pRideshare.Models;
 using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
+using System.IO;
 
 namespace p2pRideshare.Pages
 {
@@ -27,8 +28,22 @@ namespace p2pRideshare.Pages
 
         public User user = new User();
 
+
+        public async void matchFaces()
+        {
+            var client = new HttpClient();
+            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.luxand.cloud/photo/detect");
+            request.Headers.Add("token", "{{94fbde69958541e6aeef2d79a6ba01e6}}");
+            var content = new MultipartFormDataContent();
+            content.Add(new StreamContent(System.IO.File.OpenRead("")), @"wwwroot\mugshots\Selfie.jpg", "");
+            request.Content = content;
+            var response = await client.SendAsync(request);
+            response.EnsureSuccessStatusCode();
+            Console.WriteLine(await response.Content.ReadAsStringAsync());
+        }
         public void OnGet()
         {
+            matchFaces();
         }
 
         public void OnPost(IFormFile idpic, IFormFile profilepic)
