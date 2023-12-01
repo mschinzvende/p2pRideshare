@@ -57,7 +57,7 @@
         <div class="row">
             <div class="col-12">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full name"  value="" required>
+          <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full name"   required>
           <div class="input-group-append">
             <div class="input-group-text">
               <span class="fas fa-user"></span>
@@ -68,19 +68,19 @@
 
         <div class="col-6">
         <div class="input-group mb-3">
-          <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" value="" required>
+          <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone"  required>
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-user"></span>
+                                        <span class="fas fa-phone-square"></span>
             </div>
           </div>
         </div>
 
          <div class="input-group mb-3">
-          <input type="text" class="form-control" id="physicaladdress" name="physicaladdress" placeholder="Physical Address" value="" required>
+          <input type="text" class="form-control" id="physicaladdress" name="physicaladdress" placeholder="Physical Address"  required>
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-user"></span>
+                                        <span class="fas fa-home"></span>
             </div>
           </div>
         </div>
@@ -103,7 +103,7 @@
 
          <div class="input-group mb-3 mt-1">
         <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="idpic" name="idpic" onchange="previewId()" required>
+                                    <input type="file" class="custom-file-input" id="idpic" name="idpic" onchange="previewId()" accept="image/*" capture required>
                       <label class="custom-file-label" for="idpic">Upload picture of your ID</label>
                     </div>
                </div>
@@ -137,7 +137,7 @@
           <input type="text" class="form-control" id="idno" name="idno" placeholder="ID No." required>
           <div class="input-group-append">
             <div class="input-group-text">
-              <span class="fas fa-user"></span>
+                                        <span class="fas fa-id-card"></span>
             </div>
           </div>
         </div>
@@ -155,9 +155,11 @@
 
           <div class="input-group mb-3 mt-1">
         <div class="custom-file">
-                      <input type="file" class="custom-file-input" id="profilepic" name="profilepic" onchange="previewProfile()" required>
+                                    <input type="file" class="custom-file-input" id="profilepic" name="profilepic" onchange="previewProfile()" accept="image/*" capture required>
                       <label class="custom-file-label" for="profilepic">Upload your passport sized picture</label>
                     </div>
+
+                              
                </div>
                <div class="input-group mb-3">
                   <img class="img-thumbnail" style="width:40%" src="" id="profileFrame" alt="Upload Profile Pic">

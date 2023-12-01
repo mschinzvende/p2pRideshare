@@ -44,6 +44,7 @@ namespace p2pRideshare.Pages
             }
 
 
+
             user.fullName = Request.Form["fullname"];
             user.phone = Request.Form["phone"];
             user.physicalAddress = Request.Form["physicaladdress"];
@@ -52,9 +53,26 @@ namespace p2pRideshare.Pages
             user.idNo = Request.Form["idno"];
             user.username = user.email;
             user.password = computePassHash(user.password);
-            user.accountStatus = "Pending";
             user.userType = "General User";
-            user.aiVerification = "0%";
+
+
+
+            user.aiVerification = "0"; //code Function to verify ID image and profile pic
+
+            if(Int32.Parse(user.aiVerification)> 50)
+            {
+                user.accountStatus = "Approved";
+            }
+
+            else if (Int32.Parse(user.aiVerification) < 50)
+            {
+                user.accountStatus = "Pending";
+            }
+
+            
+            
+            
+            
 
             try
             {

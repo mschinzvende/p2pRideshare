@@ -60,11 +60,11 @@ namespace p2pRideshare.DMatrixAPI
             }
             Url = "https://maps.googleapis.com/maps/api/distancematrix/json";
 
-            if (string.IsNullOrEmpty("AIzaSyAgaXtBwk8K-4PXyT0T3yepfW8y_ZdxPZU"))
+            if (string.IsNullOrEmpty("APIKEY HERE"))
             {
                 throw new Exception("GoogleDistanceMatrixApiKey is not set in AppSettings.");
             }
-            Key = "AIzaSyAgaXtBwk8K-4PXyT0T3yepfW8y_ZdxPZU";
+            Key = "APIKEY HERE";
         }
 
         public async Task<Response> GetResponse()
