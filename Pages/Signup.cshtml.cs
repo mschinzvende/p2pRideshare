@@ -43,7 +43,7 @@ namespace p2pRideshare.Pages
         }
         public void OnGet()
         {
-            matchFaces();
+            
         }
 
         public void OnPost(IFormFile idpic, IFormFile profilepic)
