@@ -202,7 +202,24 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                 
+                                                 <div class="row">
+                                            <div class="col-sm-6">
+                                                <label for="carPic">Vehicle Picture</label>
+
+                                                <div class="input-group mb-3 mt-0">
+                                                    <div class="custom-file">
+                                                        <input type="file" class="custom-file-input" id="vehiclePic" name="vehiclePic" onchange="previewVehicle()" required>
+                                                        <label class="custom-file-label" for="vehiclePic">Vehicle Pic</label>
+                                                    </div>
+                                                </div>
+                                                
+                                            </div>
+                                            <div class="col-sm-6">
+                                                <div class="input-group mb-3">
+                                                    <img class="img-thumbnail" style="width:40%" src="" id="vehicleFrame" alt="Pic">
+                                                </div>
+                                            </div>
+                                                 </div>
 
                                                     <div class="row">
                                                         <div class="col-12">
@@ -309,6 +326,8 @@
 
                                                             </div>
 
+                                               
+
                                                         </div>
 
                                                     </div>
@@ -400,9 +419,9 @@
                                                         <label for="date_day">Day:</label>
                                                         <select id="date_day" name="date_day" class="form-control custom-select" required>
                                                             @{
-                                                                int startDay = DateTime.Today.Day;
-                                                                int endDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-                                                                for (int i = startDay; i <= endDay; i++)
+                                                                int starttheDay = DateTime.Today.Day;
+                                                                int endtheDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                                                                for (int i = starttheDay; i <= endtheDay; i++)
                                                                 {
                                                                     <option value="@i">@i</option>
                                                                 }
@@ -528,12 +547,7 @@
 
 
 <script>
-    //Date picker
-    $(function () {
-        $('#reservationdate').datetimepicker({
-            format: 'L'
-        });
-    })
+    
 
         function previewLicense() {
             licenseFrame.src = URL.createObjectURL(event.target.files[0]);
@@ -541,6 +555,10 @@
 
     function previewZinara() {
         zinaraFrame.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    function previewVehicle() {
+        vehicleFrame.src = URL.createObjectURL(event.target.files[0]);
     }
 
 </script>

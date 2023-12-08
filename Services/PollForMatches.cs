@@ -45,24 +45,25 @@ namespace p2pRideshare.Services
             try
             {
 
-               
+                if (offersListForMatching.Count > 0)
+                {
 
-                        int PickupLocationDistance = await GetDistance(offersListForMatching[offersListForMatching.Count-1].pickupLocation, requestsListForMatching[requestsListForMatching.Count-1].pickupLocation);
-                        int DropOffLocationDistance = await GetDistance(offersListForMatching[offersListForMatching.Count-1].pickupDestination, requestsListForMatching[requestsListForMatching.Count-1].dropoffLocation);
+                    int PickupLocationDistance = await GetDistance(offersListForMatching[offersListForMatching.Count - 1].pickupLocation, requestsListForMatching[requestsListForMatching.Count - 1].pickupLocation);
+                    int DropOffLocationDistance = await GetDistance(offersListForMatching[offersListForMatching.Count - 1].pickupDestination, requestsListForMatching[requestsListForMatching.Count - 1].dropoffLocation);
 
 
 
-                        if (PickupLocationDistance <= Int32.Parse(offersListForMatching[offersListForMatching.Count - 1].pickupThreshold) * 1000)
+                    if (PickupLocationDistance <= Int32.Parse(offersListForMatching[offersListForMatching.Count - 1].pickupThreshold) * 1000)
+                    {
+                        if (DropOffLocationDistance <= Int32.Parse(offersListForMatching[offersListForMatching.Count - 1].destinationThreshold) * 1000)
                         {
-                            if (DropOffLocationDistance <= Int32.Parse(offersListForMatching[offersListForMatching.Count - 1].destinationThreshold) * 1000)
-                            {
-                                saveMatch(Int32.Parse(requestsListForMatching[requestsListForMatching.Count - 1].requestId), Int32.Parse(offersListForMatching[offersListForMatching.Count - 1].offerId));
-                                _logger.LogInformation($"{offersListForMatching[offersListForMatching.Count - 1].pickupLocation}");
-                            }
+                            saveMatch(Int32.Parse(requestsListForMatching[requestsListForMatching.Count - 1].requestId), Int32.Parse(offersListForMatching[offersListForMatching.Count - 1].offerId));
+                            _logger.LogInformation($"{offersListForMatching[offersListForMatching.Count - 1].pickupLocation}");
                         }
+                    }
 
 
-                 
+                }
                 
             }
             catch (Exception ex)

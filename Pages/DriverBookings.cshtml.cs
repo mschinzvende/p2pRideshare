@@ -198,7 +198,7 @@ namespace p2pRideshare.Pages
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
                     string request_sql = "SELECT o.userId, o.pickupLocation, o.finalDestination, o.pickupTime, o.pickupDate, " +
-                        "o.vehicleRegNo, o.vehicleMake, o.vehicleColor, o.picDriversLicense, o.picZinaraReg, matches.matchId,matches.passengerStatus, " +
+                        "o.vehicleRegNo, o.vehicleMake, o.vehicleColor, o.picDriversLicense, o.picZinaraReg, o.picCar, matches.matchId,matches.passengerStatus, " +
                         "matches.driverStatus, matches.passengerRated, matches.driverRated FROM rideOffers AS o JOIN matches ON o.offerId=matches.offerId " +
                         "JOIN rideRequests ON rideRequests.requestId=matches.requestId JOIN users ON rideRequests.userId=users.userId " +
                         "WHERE rideRequests.userId=@current_user AND matches.driverStatus='Accepted' ";
@@ -223,11 +223,12 @@ namespace p2pRideshare.Pages
                                 matchedOffer.vehicleColor = reader.GetString(7);
                                 matchedOffer.picDriversLicense = reader.GetString(8);
                                 matchedOffer.picZinaraReg = reader.GetString(9);
-                                matchedOffer.matchId = "" + reader.GetInt32(10);
-                                matchedOffer.passengerStatus = reader.GetString(11);
-                                matchedOffer.driverStatus = reader.GetString(12);
-                                matchedOffer.passengerRated = reader.GetString(13);
-                                matchedOffer.driverRated = reader.GetString(14);
+                                matchedOffer.picCar = reader.GetString(10);
+                                matchedOffer.matchId = "" + reader.GetInt32(11);
+                                matchedOffer.passengerStatus = reader.GetString(12);
+                                matchedOffer.driverStatus = reader.GetString(13);
+                                matchedOffer.passengerRated = reader.GetString(14);
+                                matchedOffer.driverRated = reader.GetString(15);
                                 getDriverDetails("" + reader.GetInt32(0));
 
                                 MatchedOffersList.Add(matchedOffer);

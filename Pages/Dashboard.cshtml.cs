@@ -99,7 +99,7 @@ namespace p2pRideshare.Pages
             }
         }
 
-        public void OnPostOfferRide(IFormFile licensePic, IFormFile zinaraPic)
+        public void OnPostOfferRide(IFormFile licensePic, IFormFile zinaraPic, IFormFile vehiclePic)
         {
             if (licensePic != null)
             {
@@ -117,6 +117,15 @@ namespace p2pRideshare.Pages
             else
             {
                 offer.picZinaraReg = "";
+            }
+
+            if (vehiclePic != null)
+            {
+                offer.picCar = FileUploadService.UploadFile(vehiclePic);
+            }
+            else
+            {
+                offer.picCar = "";
             }
 
 
@@ -137,9 +146,9 @@ namespace p2pRideshare.Pages
                 {
                     connection.Open();
                     string sql = "INSERT INTO rideOffers (userId, pickupLocation, finalDestination, pickupTime, pickupDate, " +
-                        "vehicleRegNo, vehicleMake, vehicleColor, pickupThreshold, destinationThreshold, picDriversLicense, picZinaraReg)" +
+                        "vehicleRegNo, vehicleMake, vehicleColor, pickupThreshold, destinationThreshold, picDriversLicense, picZinaraReg, picCar)" +
                         "VALUES (@userId, @pickupLocation, @pickupDestination, @pickupTime, @pickupDate, @vehicleRegNo, @vehicleMake, @vehicleColor, " +
-                        " @pickupThreshold, @destinationThreshold, @picDriversLicense, @picZinaraReg)";
+                        " @pickupThreshold, @destinationThreshold, @picDriversLicense, @picZinaraReg, @picCar)";
 
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
@@ -156,6 +165,7 @@ namespace p2pRideshare.Pages
                         command.Parameters.AddWithValue("@destinationThreshold", offer.destinationThreshold);
                         command.Parameters.AddWithValue("@picDriversLicense", offer.picDriversLicense);
                         command.Parameters.AddWithValue("@picZinaraReg", offer.picZinaraReg);
+                        command.Parameters.AddWithValue("@picCar", offer.picCar);
 
 
                         command.ExecuteNonQuery();

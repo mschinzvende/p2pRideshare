@@ -13,6 +13,7 @@
         public string vehicleColor = "";
         public string  picDriversLicense = "";
         public string  picZinaraReg = "";
+        public string picCar = "";
         public string  pickupThreshold = "";
         public string  destinationThreshold = "";
     }
