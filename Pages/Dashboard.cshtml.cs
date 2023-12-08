@@ -58,7 +58,7 @@ namespace p2pRideshare.Pages
             request.extraPassengers = Request.Form["extraPassengers"];
             request.offerPrice = Request.Form["offerprice"];
             request.pickupTime = Request.Form["pickupTime"];
-            request.pickupDate = Request.Form["reservationdate"];
+            request.pickupDate = Request.Form["date_day"] + "/"+ Request.Form["date_month"] +"/"+Request.Form["date_year"];
 
 
             try
@@ -124,7 +124,7 @@ namespace p2pRideshare.Pages
             offer.pickupLocation = Request.Form["pickupLocation"];
             offer.pickupDestination = Request.Form["destinationLocation"];
             offer.pickupTime = Request.Form["pickupTime"];
-            offer.pickupDate = Request.Form["reservationdate"];
+            offer.pickupDate = Request.Form["date_day"] + "/" + Request.Form["date_month"] + "/" + Request.Form["date_year"];
             offer.vehicleRegNo = Request.Form["vehicleRegNo"];
             offer.vehicleMake = Request.Form["vehicleMake"];
             offer.vehicleColor = Request.Form["vehicleColor"];

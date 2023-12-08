@@ -137,20 +137,42 @@
                                                     </select>
                                                 </div>
 
-                                                            </div>
+                                            </div>
 
-                                                            <div class="col-sm-6">
-                                                <div class="form-group">
+                                            <div class="col-sm-6">
 
-                                                    <label>Date:</label>
-                                                    <div class="input-group date" id="reservationdate" data-target-input="nearest">
-                                                        <input type="text" class="form-control datetimepicker-input" name="reservationdate" data-target="#reservationdate" required />
-                                                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                        </div>
-                                                    </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <label for="date_day">Day:</label>
+                                                        <select id="date_day" name="date_day" class="form-control custom-select" required>
+                                                            @{
+                                                                int startDay = DateTime.Today.Day;
+                                                                int endDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                                                                for(int i = startDay; i <= endDay; i++)
+                                                                {
+                                                                    <option value="@i">@i</option>
+                                                                }
+                                                            }
+                                                            </select>
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                                         <label for="date_month">Month:</label>
+                                                                    <select id="date_month" name="date_month" class="form-control custom-select" required>
 
-                                                </div>
+                                                            <option value="@DateTime.Now.Month.ToString()">@DateTime.Now.Month.ToString()</option>
+                                                                    
+                                                                    </select>
+                                                                    </div>
+                                                                    <div class="col-sm-4">
+                                                        <label for="date_year">Year:</label>
+                                                        <select id="date_year" name="date_year" class="form-control custom-select" required>
+
+                                                            <option value="@DateTime.Now.Year.ToString()">@DateTime.Now.Year.ToString()</option>
+                                                            
+                                                        </select>
+                                                                    </div>
+                                                                </div>
+                                               
                                                             </div>
                                                         </div>
                                                    
@@ -373,16 +395,36 @@
 
                                                     <div class="row">
                                             <div class="col-sm-6">
-                                                <div class="form-group">
-
-                                                    <label>Date:</label>
-                                                    <div class="input-group date" id="reservationdate" n data-target-input="nearest">
-                                                        <input type="text" class="form-control datetimepicker-input" name="reservationdate" data-target="#reservationdate" required />
-                                                        <div class="input-group-append" data-target="#reservationdate" data-toggle="datetimepicker">
-                                                            <div class="input-group-text"><i class="fa fa-calendar"></i></div>
-                                                        </div>
+                                                <div class="row">
+                                                    <div class="col-sm-4">
+                                                        <label for="date_day">Day:</label>
+                                                        <select id="date_day" name="date_day" class="form-control custom-select" required>
+                                                            @{
+                                                                int startDay = DateTime.Today.Day;
+                                                                int endDay = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
+                                                                for (int i = startDay; i <= endDay; i++)
+                                                                {
+                                                                    <option value="@i">@i</option>
+                                                                }
+                                                            }
+                                                        </select>
                                                     </div>
+                                                    <div class="col-sm-4">
+                                                        <label for="date_month">Month:</label>
+                                                        <select id="date_month" name="date_month" class="form-control custom-select" required>
 
+                                                            <option value="@DateTime.Now.Month.ToString()">@DateTime.Now.Month.ToString()</option>
+
+                                                        </select>
+                                                    </div>
+                                                    <div class="col-sm-4">
+                                                        <label for="date_year">Year:</label>
+                                                        <select id="date_year" name="date_year" class="form-control custom-select" required>
+
+                                                            <option value="@DateTime.Now.Year.ToString()">@DateTime.Now.Year.ToString()</option>
+
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
                                                     </div>
