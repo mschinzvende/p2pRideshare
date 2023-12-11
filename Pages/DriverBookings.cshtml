@@ -81,7 +81,35 @@
 
                                     <p>Date: @item.pickupDate | Time: @item.pickupTime</p>
                                     <p>Vehicle: @item.vehicleMake | Color: @item.vehicleColor | RegNo: @item.vehicleRegNo</p>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <p>
+                                            Phone:@if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
+                                            {
+                                                @item.phone
+                                            }
+                                            else
+                                            {
+                                                <b>Waiting driver confirmation</b>
+                                            }
 
+                                        </p>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <p>
+                                            Email:@if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
+                                            {
+                                                @item.email
+
+                                            }
+
+                                            else
+                                            {
+                                                <b>Waiting driver confirmation</b>
+                                            }
+                                        </p>
+                                    </div>
+                                </div>
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <label>D/License</label>
@@ -96,35 +124,7 @@
                                         <img src="/mugshots/@item.picCar" alt="carPicture" class="img-thumbnail" style="width:100%">
                                     </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                    <p>
-                                        Phone:@if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
-                                        {
-                                            @item.phone
-                                        }
-                                        else
-                                        {
-                                            <b>Waiting driver confirmation</b>
-                                        }
-
-                                    </p>
-                                    </div>
-                                    <div class="col-sm-6">
-                                    <p>
-                                        Email:@if (item.passengerStatus == "Accepted" && item.driverStatus == "Accepted")
-                                        {
-                                            @item.email
-                                        
-                                        }
-
-                                        else
-                                        {
-                                            <b>Waiting driver confirmation</b>
-                                        }
-                                    </p>
-                                    </div>
-                                    </div>
+                                    
                                 </div>
                                 <ul class="social">
 

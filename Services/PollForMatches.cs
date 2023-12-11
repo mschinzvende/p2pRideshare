@@ -57,8 +57,11 @@ namespace p2pRideshare.Services
                     {
                         if (DropOffLocationDistance <= Int32.Parse(offersListForMatching[offersListForMatching.Count - 1].destinationThreshold) * 1000)
                         {
-                            saveMatch(Int32.Parse(requestsListForMatching[requestsListForMatching.Count - 1].requestId), Int32.Parse(offersListForMatching[offersListForMatching.Count - 1].offerId));
-                            _logger.LogInformation($"{offersListForMatching[offersListForMatching.Count - 1].pickupLocation}");
+                            if (offersListForMatching[offersListForMatching.Count - 1].pickupDate == requestsListForMatching[requestsListForMatching.Count - 1].pickupDate && offersListForMatching[offersListForMatching.Count - 1].pickupTime == requestsListForMatching[requestsListForMatching.Count - 1].pickupTime)
+                            {
+                                saveMatch(Int32.Parse(requestsListForMatching[requestsListForMatching.Count - 1].requestId), Int32.Parse(offersListForMatching[offersListForMatching.Count - 1].offerId));
+                                _logger.LogInformation($"{offersListForMatching[offersListForMatching.Count - 1].pickupLocation}");
+                            }
                         }
                     }
 
@@ -94,8 +97,13 @@ namespace p2pRideshare.Services
                         {
                             if (DropOffLocationDistance <= Int32.Parse(offeritem.destinationThreshold) * 1000)
                             {
+                                if (offeritem.pickupDate == requestitem.pickupDate && offeritem.pickupTime==requestitem.pickupTime)
+                                {
+
+                                
                                 saveMatch(Int32.Parse(requestitem.requestId), Int32.Parse(offeritem.offerId));
                                 _logger.LogInformation($"{offeritem.pickupLocation}");
+                                }
                             }
                         }
 
@@ -151,7 +159,7 @@ namespace p2pRideshare.Services
             {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
-                    string sql = "SELECT requestId, pickupLocation, dropoffLocation" +
+                    string sql = "SELECT requestId, pickupLocation, dropoffLocation, pickupDate" +
                         " FROM rideRequests";
                     connection.Open();
 
@@ -165,6 +173,7 @@ namespace p2pRideshare.Services
                                 matchingRequest.requestId = "" + reader.GetInt32(0);
                                 matchingRequest.pickupLocation = reader.GetString(1);
                                 matchingRequest.dropoffLocation = reader.GetString(2);
+                                matchingRequest.pickupDate = reader.GetString(3);
 
                                 requestsListForMatching.Add(matchingRequest);
                                
@@ -188,7 +197,7 @@ namespace p2pRideshare.Services
            {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
-                    string sql = "SELECT offerId, pickupLocation, finalDestination, pickupThreshold, destinationThreshold" +
+                    string sql = "SELECT offerId, pickupLocation, finalDestination, pickupThreshold, destinationThreshold, pickupDate" +
                         " FROM rideOffers";
                     connection.Open();
 
@@ -205,6 +214,7 @@ namespace p2pRideshare.Services
                                 matchOffer.pickupDestination = reader.GetString(2);
                                 matchOffer.pickupThreshold = reader.GetString(3);
                                 matchOffer.destinationThreshold = reader.GetString(4);
+                                matchOffer.pickupDate = reader.GetString(5);
 
                                 offersListForMatching.Add(matchOffer);
                                 
@@ -227,7 +237,6 @@ namespace p2pRideshare.Services
             GoogleDistanceMatrixApi api = new GoogleDistanceMatrixApi(new[] { origin }, new[] { destination });
             var response = await api.GetResponse();
             
-
             int newdistance = response.Rows[0].Elements[0].Distance.Value;
 
             return newdistance;
