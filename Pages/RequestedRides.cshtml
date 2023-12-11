@@ -74,6 +74,17 @@
 
                                 </div>
                             }
+
+
+                            @if (@item.requestStatus == "Rejected")
+                            {
+                                <div class="mb-3 mb-lg-0">
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Driver Rejected </strong>
+                                    </div>
+
+                                </div>
+                            }
                             
                             <div class="our-team">
                                 <div class="picture">
