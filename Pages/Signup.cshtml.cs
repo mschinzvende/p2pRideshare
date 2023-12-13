@@ -69,7 +69,7 @@ namespace p2pRideshare.Pages
 
             string _apiUrl = "https://faceapi.mxface.ai";
             string _subscripptionKey = "JbDOOp5DtA3DSstgY7-i9NBNd3RAk2112";
-            string matchConfidence = string.Empty;
+            
             using (var httpClient = new HttpClient())
             {
                 string filepathID = Path.Combine(Environment.ContentRootPath, @"wwwroot\mugshots", IDPic);
