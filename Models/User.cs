@@ -15,6 +15,7 @@
         public string accountStatus = "";
         public string userType = "";
         public string aiVerification = "";
+        public string subDueDate = string.Empty;
 
 
 

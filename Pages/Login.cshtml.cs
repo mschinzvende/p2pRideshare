@@ -25,6 +25,7 @@ namespace p2pRideshare.Pages
             HttpContext.Session.SetString("UserPICTURE", "");
             HttpContext.Session.SetString("UserPERMISSION", "");
             HttpContext.Session.SetString("UserACCOUNTSTATUS", "");
+            HttpContext.Session.SetString("UserDueDate", "");
 
             if (string.IsNullOrEmpty(Request.Query["successMessage"]))
             {
@@ -77,6 +78,8 @@ namespace p2pRideshare.Pages
                                     HttpContext.Session.SetString("UserPICTURE", "" + reader.GetString(4));
                                     HttpContext.Session.SetString("UserPERMISSION", "" + reader.GetString(11));
                                     HttpContext.Session.SetString("UserACCOUNTSTATUS", "" + reader.GetString(10));
+                                    HttpContext.Session.SetString("UserDueDate", "" + reader.GetString(14));
+
 
                                     /*Globals.logged_in_user_id = ""+ reader.GetInt32(0);
                                     Globals.logged_in_user = reader.GetString(1);

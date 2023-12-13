@@ -69,6 +69,7 @@ namespace p2pRideshare.Pages
             user.username = user.email;
             user.password = computePassHash(user.password);
             user.userType = "General User";
+            user.subDueDate = DateTime.Now.Date.AddDays(30).ToString();
 
 
 
@@ -94,8 +95,8 @@ namespace p2pRideshare.Pages
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
                     connection.Open();
-                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus, userType, aiVerification, rating)" +
-                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus, @userType, @aiVerification, @rating)";
+                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus, userType, aiVerification, rating, subDueDate)" +
+                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus, @userType, @aiVerification, @rating, @subDueDate)";
 
                     using (SqlCommand command = new SqlCommand(sql, connection))
                     {
@@ -112,6 +113,7 @@ namespace p2pRideshare.Pages
                         command.Parameters.AddWithValue("@userType", user.userType);
                         command.Parameters.AddWithValue("@aiVerification", user.aiVerification);
                         command.Parameters.AddWithValue("@rating",0);
+                        command.Parameters.AddWithValue("@subDueDate", user.subDueDate);
 
                         command.ExecuteNonQuery();
                     }

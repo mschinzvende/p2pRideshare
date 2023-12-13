@@ -1,0 +1,381 @@
+﻿@page
+@model p2pRideshare.Pages.MyAccountModel
+@{
+
+    if (HttpContext.Session.GetString("UserNAME") == "")
+    {
+        Response.Redirect("/");
+    }
+}
+
+
+<div class="row mb-2">
+    <div class="col-12">
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <!-- Content Header (Page header) -->
+            <section class="content-header">
+                <div class="container-fluid">
+                    <div class="row mb-2">
+                        <div class="col-sm-6">
+                            <h1>User Status: @Model.user.accountStatus</h1>
+                        </div>
+                        <div class="col-sm-6">
+                            <ol class="breadcrumb float-sm-right">
+                                <li class="breadcrumb-item"><a href="#">Home</a></li>
+                                <li class="breadcrumb-item active">User Profile</li>
+                            </ol>
+                        </div>
+                    </div>
+                </div><!-- /.container-fluid -->
+            </section>
+            @if (Model.errorMessage.Length > 0)
+            {
+                <div class="d-flex justify-content-between w-100 flex-wrap">
+                    <div class="mb-3 mb-lg-0">
+                        <div class="alert alert-danger" role="alert">
+                            <strong>@Model.errorMessage</strong>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.successMessage.Length > 0)
+            {
+                <div class="d-flex justify-content-between w-100 flex-wrap">
+                    <div class="mb-3 mb-lg-0">
+                        <div class="alert alert-success" role="alert">
+                            <strong>@Model.successMessage</strong>
+                        </div>
+                    </div>
+                </div>
+            }
+            <!-- Main content -->
+            <section class="content">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-md-3">
+
+                            <!-- Profile Image -->
+                            <div class="card card-primary card-outline">
+                                <div class="card-body box-profile">
+                                    <div class="text-center">
+                                        <img class="profile-user-img img-fluid img-circle"
+                                             src="/mugshots/@Model.user.profilePic"
+                                             alt="User profile picture">
+                                    </div>
+
+                                    <h3 class="profile-username text-center">@Model.user.fullName</h3>
+
+                                    <p class="text-muted text-center">@Model.user.idNo</p>
+                                    <p class="text-muted text-center">ACCOUNT STATUS: @Model.user.accountStatus</p>
+                                    <p class="text-muted text-center">NEXT DUE DATE: @Model.user.subDueDate</p>
+
+                                </div>
+                                <!-- /.card-body -->
+                            </div>
+                        </div>
+
+
+
+
+
+
+                        <div class="col-md-9">
+                            <div class="card">
+                                <div class="card-header p-2">
+                                    <ul class="nav nav-pills">
+
+                                        <li class="nav-item"><a class="nav-link active" href="#settings" data-toggle="tab">User Information</a></li>
+                                        <li class="nav-item"><a class="nav-link" href="#passwordtab" data-toggle="tab">Change Password</a></li>
+                                    </ul>
+                                </div><!-- /.card-header -->
+                                <div class="card-body">
+                                    <div class="tab-content">
+
+                                        <!--Settings Tab-->
+                                        <div class="tab-pane active" id="settings">
+                                            <form method="POST" enctype="multipart/form-data" asp-page-handler="updateUser">
+
+
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <input type="hidden" class="form-control" id="userid" name="userid" value="@Model.user.userId" />
+                                                        <input type="hidden" class="form-control" id="id_picture" name="id_picture" value="@Model.user.idScan" />
+                                                        <input type="hidden" class="form-control" id="profile_picture" name="profile_picture" value="@Model.user.profilePic" />
+                                                        <label>Full Name</label>
+                                                        <div class="input-group mb-3">
+
+                                                            <input type="text" class="form-control" id="fullname" name="fullname" placeholder="Full name" value="@Model.user.fullName">
+                                                            <div class="input-group-append">
+                                                                <div class="input-group-text">
+                                                                    <span class="fas fa-user"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label>Phone</label>
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" class="form-control" id="phone" name="phone" placeholder="Phone" value="@Model.user.phone">
+                                                            <div class="input-group-append">
+                                                                <div class="input-group-text">
+                                                                    <span class="fas fa-user"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <label>Physical Address</label>
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" class="form-control" id="physicaladdress" name="physicaladdress" placeholder="Physical Address" value="@Model.user.physicalAddress">
+                                                            <div class="input-group-append">
+                                                                <div class="input-group-text">
+                                                                    <span class="fas fa-user"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+
+                                                        <label>Picture of National ID</label>
+                                                        <div class="input-group mb-3 mt-1">
+                                                            <div class="custom-file">
+
+                                                                <input type="file" class="custom-file-input" id="idpic" name="idpic" onchange="previewId()">
+                                                                <label class="custom-file-label" for="idpic">Upload picture of user ID</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group mb-3">
+                                                            <img class="img-thumbnail" style="width:40%" src="/mugshots/@Model.user.idScan" id="idFrame" alt="Upload ID Pic">
+                                                        </div>
+
+
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label>Email</label>
+                                                        <div class="input-group mb-3">
+                                                            <input type="email" class="form-control" id="email" name="email" placeholder="Email" value="@Model.user.email">
+                                                            <div class="input-group-append">
+                                                                <div class="input-group-text">
+                                                                    <span class="fas fa-envelope"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <label>National ID No.</label>
+                                                        <div class="input-group mb-3">
+                                                            <input type="text" class="form-control" id="idno" name="idno" placeholder="ID No." value="@Model.user.idNo">
+                                                            <div class="input-group-append">
+                                                                <div class="input-group-text">
+                                                                    <span class="fas fa-user"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <label>Profile Picture</label>
+                                                        <div class="input-group mb-3 mt-1">
+                                                            <div class="custom-file">
+                                                                <input type="file" class="custom-file-input" id="profilepic" name="profilepic" onchange="previewProfile()">
+                                                                <label class="custom-file-label" for="profilepic">Upload user profile picture</label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="input-group mb-3">
+                                                            <img class="img-thumbnail" style="width:40%" src="/mugshots/@Model.user.profilePic" id="profileFrame" alt="Upload Profile Pic">
+                                                        </div>
+
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row">
+
+                                                    <div class="col-4">
+                                                        <button type="submit" class="btn btn-primary btn-block">Update Information</button>
+                                                    </div>
+                                                    <!-- /.col -->
+                                                </div>
+                                            </form>
+                                        </div>
+                                        <!-- /.tab-pane -->
+                                        <!--Password Tab-->
+
+                                        <div class="tab-pane" id="passwordtab">
+
+                                            <form method="POST" enctype="multipart/form-data" asp-page-handler="changePassword">
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <input type="hidden" class="form-control" id="userid" name="userid" value="@Model.user.userId" />
+                                                        <label>Password</label>
+                                                        <div class="input-group mb-1">
+                                                            <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                                                            <div class="input-group-append">
+                                                                <div class="input-group-text">
+                                                                    <span class="fas fa-lock"></span>
+                                                                </div>
+                                                            </div>
+
+                                                        </div>
+                                                        <!-- An element to toggle between password visibility -->
+                                                        <input type="checkbox" onclick="myFunction()"> Show Password
+                                                        <br />
+                                                    </div>
+
+                                                    <div class="col-6">
+                                                        <label>Password Confirmation</label>
+                                                        <div class="input-group mb-1">
+                                                            <input type="password" class="form-control" id="retypepassword" name="retypepassword" placeholder="Retype password" required>
+                                                            <div class="input-group-append">
+                                                                <div class="input-group-text">
+                                                                    <span class="fas fa-lock"></span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-text confirm-message">.</div>
+                                                    </div>
+
+                                                </div>
+
+                                                <div class="row">
+
+                                                    <div class="col-4">
+                                                        <button type="submit" id="passwordBtn" name="passwordBtn" class="btn btn-primary btn-block">Update Information</button>
+                                                        
+                                                    </div>
+
+                                                    <div class="col-4">
+                                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#deleteacModal"> Delete Account </button>
+
+                                                    </div>
+                                                    <!-- /.col -->
+                                                </div>
+                                            </form>
+
+                                        </div>
+
+                                        <!--End Password Tab-->
+
+
+                                    </div>
+                                    <!-- /.tab-content -->
+                                </div><!-- /.card-body -->
+                            </div>
+                            <!-- /.card -->
+                        </div>
+                        <!-- /.col -->
+                    </div>
+                    <!-- /.row -->
+                </div><!-- /.container-fluid -->
+            </section>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="deleteacModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Delete Account</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            
+                <div class="modal-body">
+
+
+
+                    <div class="form-group">
+
+                        <div class="row">
+                            <div class="col-sm-12">
+
+                            <a href="/MyAccount?action=Delete" class="btn btn-primary btn-block">Delete Account</a>
+                                    <p>Are you sure you want to delete your account</p>
+
+                                
+                            </div>
+
+                        </div>
+
+
+                    </div>
+
+                </div>
+
+  
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+
+
+
+
+
+<!-- jQuery -->
+<script src="~/plugins/jquery/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<!-- Bootstrap 4 -->
+<script src="~/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- AdminLTE App -->
+<script src="~/dist/js/adminlte.min.js"></script>
+
+
+<script>
+    function previewId() {
+        idFrame.src = URL.createObjectURL(event.target.files[0]);
+    }
+
+    function previewProfile() {
+        profileFrame.src = URL.createObjectURL(event.target.files[0]);
+    }
+    function myFunction() {
+        var x = document.getElementById("password");
+        if (x.type === "password") {
+            x.type = "text";
+        } else {
+            x.type = "password";
+        }
+    }
+</script>
+
+<script>
+    $('#password, #retypepassword').on('keyup', function () {
+
+        $('.confirm-message').removeClass('success-message').removeClass('error-message');
+
+        let password = $('#password').val();
+        let confirm_password = $('#retypepassword').val();
+
+        const stream = document.getElementById("passwordBtn");
+
+        if (password === "") {
+            $('.confirm-message').text("Password Field cannot be empty").addClass('error-message');
+            stream.style.visibility = 'hidden';
+        }
+        else if (confirm_password === "") {
+            $('.confirm-message').text("Confirm Password Field cannot be empty").addClass('error-message');
+            stream.style.visibility = 'hidden';
+        }
+        else if (confirm_password === password) {
+            $('.confirm-message').text('Password Match!').addClass('success-message');
+            stream.style.visibility = 'visible';
+        }
+        else {
+            $('.confirm-message').text("Password Doesn't Match!").addClass('error-message');
+            stream.style.visibility = 'hidden';
+        }
+
+    });
+</script>
+
+<style>
+    .success-message {
+        color: green
+    }
+
+    .error-message {
+        color: red;
+    }
+</style>

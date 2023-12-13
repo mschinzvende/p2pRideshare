@@ -215,6 +215,21 @@
                             </li>
                         }
 
+                        @if (@httpContextAccessor.HttpContext.Session.GetString("UserPERMISSION") == "General User")
+                        {
+                            <li class="nav-item">
+                                <a href="/MyAccount" class="nav-link">
+                                    <i class="nav-icon fas fa-fingerprint"></i>
+                                    <p>
+                                        My Account
+
+                                    </p>
+                                </a>
+
+                            </li>
+                        }
+                       
+
                         
 
                         <li class="nav-item">
