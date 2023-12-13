@@ -61,6 +61,9 @@
                                 </div>
                                 <div class="team-content">
                                     <p>Points rating: @item.rating</p>
+                                <button type="button" class="btn btn-default" data-toggle="modal" data-target="#ratingModal">
+                                    View Comments
+                                </button>
                                     <p>@item.fullName - @item.idNo</p>
                                     
                                     <p>Pickup: @item.pickupLocation</p>
@@ -102,3 +105,42 @@
             </div>
         </section>
     </div>
+
+
+<div class="modal fade" id="ratingModal">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Rating Comments</h4>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form method="POST" enctype="multipart/form-data" asp-page-handler="rateuser">
+                <div class="modal-body">
+
+                    
+
+                    <div class="form-group">
+                        
+                        <div class="row">
+                            <div class="col-sm-12">
+                                @foreach(var comment in Model.ratingComments)
+                                {
+                                    <p>@comment</p>
+                                }
+                            </div>
+                            
+                        </div>
+
+                        
+                    </div>
+
+                </div>
+                
+            </form>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>

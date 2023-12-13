@@ -13,6 +13,8 @@ namespace p2pRideshare.Pages
         public List<MatchedOffers> MatchedOffersList = new List<MatchedOffers>();
         MatchedOffers matchedOffer = new MatchedOffers();
 
+        public List<string> ratingComments = new List<string>();
+
         public void OnGet()
         {
 
@@ -35,6 +37,36 @@ namespace p2pRideshare.Pages
             }
 
             getMatchingOffers();
+            GetRatingComments();
+        }
+        public void GetRatingComments()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Globals.connection_string))
+                {
+                    string user_sql = "SELECT comment FROM comments WHERE userId=@userId";
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(user_sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", HttpContext.Session.GetString("UserID"));
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ratingComments.Add(reader.GetString(0));
+
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+            }
         }
 
         public void getDriverDetails(string userID)

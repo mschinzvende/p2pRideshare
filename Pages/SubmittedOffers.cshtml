@@ -1,0 +1,331 @@
+﻿@page
+@model p2pRideshare.Pages.SubmittedOffersModel
+@{
+}
+
+<!-- Content Wrapper. Contains page content -->
+<div class="content-wrapper">
+    <section class="content-header">
+        <div class="container-fluid">
+
+
+            @if (Model.errorMessage.Length > 0)
+            {
+                <div class="d-flex justify-content-between w-100 flex-wrap">
+                    <div class="mb-3 mb-lg-0">
+                        <div class="alert alert-danger" role="alert">
+                            <strong>@Model.errorMessage</strong>
+                        </div>
+                    </div>
+                </div>
+            }
+
+            @if (Model.successMessage.Length > 0)
+            {
+                <div class="d-flex justify-content-between w-100 flex-wrap">
+                    <div class="mb-3 mb-lg-0">
+                        <div class="alert alert-success" role="alert">
+                            <strong>@Model.successMessage</strong>
+                        </div>
+                    </div>
+                </div>
+            }
+
+
+
+            <div class="row">
+
+                <div class="col-sm-6">
+                    <h1>Ride Offers Submitted</h1>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <section class="content pb-3">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4"></div>
+                <div class="col-sm-4"></div>
+                @foreach (var item in Model.offersForUserList)
+                {
+                    <div class="col-sm-4">
+                        @if (@item.offerStatus == "Waiting" || item.offerStatus == string.Empty || item.offerStatus!="Cancelled")
+                        {
+                            @if (@item.offerStatus == "Waiting")
+                            {
+                                <div class="mb-3 mb-lg-0">
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Waiting Passenger Confirmation </strong>
+                                    </div>
+
+                                </div>
+                            }
+
+                            @if (@item.offerStatus == string.Empty)
+                            {
+                                <div class="mb-3 mb-lg-0">
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Waiting Match </strong>
+                                    </div>
+
+                                </div>
+                            }
+
+
+                            @if (@item.offerStatus == "Rejected")
+                            {
+                                <div class="mb-3 mb-lg-0">
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Passenger Rejected </strong>
+                                    </div>
+
+                                </div>
+                            }
+                            
+                            <div class="our-team">
+                                <div class="picture">
+                                    <img class="img-fluid" src="~/mugshots/@HttpContext.Session.GetString("UserPICTURE")">
+                                </div>
+                                <div class="team-content">
+
+                                    <form method="POST" enctype="multipart/form-data" >
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="pickupLocation">Pickup Location</label>
+                                                <input type="text" id="pickupLocation" name="pickupLocation" value="@item.pickupLocation" class="form-control" readonly >
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="offerId" name="offerId" value="@item.offerId" class="form-control">
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                            <div class="form-group">
+                                                <label for="pickupDestination">Destination</label>
+                                                <input type="text" id="pickupDestination" name="pickupDestination" value="@item.pickupDestination" class="form-control" readonly>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="date">Pickup Date</label>
+                                                    <input type="text" id="pickupDate" name="pickupDate" value="@item.pickupDate" class="form-control" required>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="pickupTime">Pickup Time</label>
+                                                    <select id="pickupTime" name="pickupTime" class="form-control custom-select" required>
+                                                        <option selected value="@item.pickupTime">@item.pickupTime</option>
+
+                                                        @{
+                                                            string reqstartTime = "6:30 AM";
+                                                            string reqendTime = "6:30 PM";
+                                                            TimeSpan reqinterval = new TimeSpan(0, 30, 0);
+
+                                                            while (DateTime.Parse(reqstartTime) <= DateTime.Parse(reqendTime))
+                                                            {
+                                                                <option>@reqstartTime</option>
+
+                                                                reqstartTime = DateTime.Parse(reqstartTime).Add(reqinterval).ToString("HH:mm tt");
+                                                            }
+                                                        }
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label for="vehicleRegNo">Vehicle RegNo</label>
+                                                    <input type="text" id="vehicleRegNo" name="vehicleRegNo" value="@item.vehicleRegNo" class="form-control" required>
+                                            </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                            <div class="form-group">
+                                                <label for="vehicleMake">Vehicle Make</label>
+                                                    <input type="text" id="vehicleMake" name="vehicleMake" value="@item.vehicleMake" class="form-control" required>
+                                            </div>
+                                            </div>
+
+
+                                        
+
+                                    
+                                            <div class="col-sm-4">
+                                            <div class="form-group">
+                                                    <label for="vehicleColor">Vehicle Color</label>
+                                                    <input type="text" id="vehicleColor" name="vehicleColor" value="@item.vehicleColor" class="form-control" required>
+                                            </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <button type="submit" class="btn btn-primary btn-block">Save</button>
+                                            </div>
+
+                                            <div class="col-sm-6">
+
+                                                @if (item.offerStatus == string.Empty)
+                                                {
+                                                    <a href="/SubmittedOffers?offerId=@item.offerId&action=Delete" class="btn btn-primary btn-block">Delete Request</a>
+                                                }
+
+                                                else
+                                                {
+                                                    <a href="/SubmittedOffers?offerId=@item.offerId&action=Cancel" class="btn btn-primary btn-block">Cancel Request</a>
+                                                }
+                                                
+                                            </div>
+                                        </div>
+                                    </form>
+
+                                </div>
+                                
+                            </div>
+                        }
+
+                        @if (@item.offerStatus == "Accepted" || item.offerStatus == "Rejected")
+                        {
+                            @if (@item.offerStatus == "Accepted")
+                            {
+                                <div class="mb-3 mb-lg-0">
+                                    <div class="alert alert-success" role="alert">
+                                        <strong>Offer Accepted </strong>
+                                    </div>
+
+                                </div>
+                            }
+
+                            @if (@item.offerStatus == "Rejected")
+                            {
+                                <div class="mb-3 mb-lg-0">
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Offer Rejected </strong>
+                                    </div>
+
+                                </div>
+                            }
+
+                            <div class="our-team">
+                                <div class="picture">
+                                    <img class="img-fluid" src="~/mugshots/@HttpContext.Session.GetString("UserPICTURE")">
+                                </div>
+                                <div class="team-content">
+
+                                    <form method="POST" enctype="multipart/form-data">
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label for="pickupLocation">Pickup Location</label>
+                                                    <input type="text" id="pickupLocation" name="pickupLocation" value="@item.pickupLocation" class="form-control" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" id="offerId" name="offerId" value="@item.offerId" class="form-control">
+
+                                        <div class="row">
+                                            <div class="col-sm-12">
+                                                <div class="form-group">
+                                                    <label for="pickupDestination">Destination</label>
+                                                    <input type="text" id="pickupDestination" name="pickupDestination" value="@item.pickupDestination" class="form-control" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="date">Pickup Date</label>
+                                                    <input type="text" id="pickupDate" name="pickupDate" value="@item.pickupDate" class="form-control" readonly >
+                                                </div>
+                                            </div>
+
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="pickupTime">Pickup Time</label>
+                                                    <select id="pickupTime" name="pickupTime" class="form-control custom-select" readonly >
+                                                        <option selected value="@item.pickupTime">@item.pickupTime</option>
+
+                                                        @{
+                                                            string reqstartTime = "6:30 AM";
+                                                            string reqendTime = "6:30 PM";
+                                                            TimeSpan reqinterval = new TimeSpan(0, 30, 0);
+
+                                                            while (DateTime.Parse(reqstartTime) <= DateTime.Parse(reqendTime))
+                                                            {
+                                                                <option>@reqstartTime</option>
+
+                                                                reqstartTime = DateTime.Parse(reqstartTime).Add(reqinterval).ToString("HH:mm tt");
+                                                            }
+                                                        }
+
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="row">
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label for="vehicleRegNo">Vehicle RegNo</label>
+                                                    <input type="text" id="vehicleRegNo" name="vehicleRegNo" value="@item.vehicleRegNo" class="form-control" readonly>
+                                                </div>
+                                            </div>
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label for="vehicleMake">Vehicle Make</label>
+                                                    <input type="text" id="vehicleMake" name="vehicleMake" value="@item.vehicleMake" class="form-control" readonly>
+                                                </div>
+                                            </div>
+
+
+
+
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label for="vehicleColor">Vehicle Color</label>
+                                                    <input type="text" id="vehicleColor" name="vehicleColor" value="@item.vehicleColor" class="form-control" readonly>
+                                                </div>
+                                            </div>
+                                        
+                                                         
+
+
+                                        <div class="row">
+                                            
+                                            <div class="col-sm-12">
+                                                <a  href="/SubmittedOffers?offerId=@item.offerId&action=Cancel" class="btn btn-primary btn-block">Cancel Request</a>
+                                            </div>
+                                        </div>
+                                    </form>
+
+
+
+
+
+                                </div>
+
+                            </div>
+                        }
+                    </div>
+                }
+
+
+            </div>
+        </div>
+    </section>
+</div>

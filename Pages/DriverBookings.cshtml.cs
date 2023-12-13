@@ -148,6 +148,31 @@ namespace p2pRideshare.Pages
                 errorMessage = ex.Message;
             }
         }
+        public void InsertComment(string userID, string comment)
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Globals.connection_string))
+                {
+                    string user_sql = "INSERT INTO comments (userId, comment) VALUES (@userId, @comment)";
+                    connection.Open();
+
+                    using (SqlCommand command = new SqlCommand(user_sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", userID);
+                        command.Parameters.AddWithValue("@comment", comment);
+
+                        command.ExecuteNonQuery();
+                    }
+
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+            }
+        }
 
         public void OnPostRateuser()
         {
@@ -155,6 +180,7 @@ namespace p2pRideshare.Pages
             string userID = Request.Form["theuser_id"];
             string matchID = Request.Form["thematch_id"];
             int rating = Int32.Parse(Request.Form["customRadio"]);
+            string comment = Request.Form["comments"];
             try
             {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
@@ -181,6 +207,7 @@ namespace p2pRideshare.Pages
                     }
 
                     connection.Close();
+                    InsertComment(userID, comment);
 
                     Response.Redirect("/DriverBookings");
                 }

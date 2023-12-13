@@ -16,7 +16,8 @@ namespace p2pRideshare.Pages
 
         public List<MatchedRequest> MatchedRequestsList = new List<MatchedRequest>();
         MatchedRequest matchedRequest = new MatchedRequest();
-       
+        public List<string> ratingComments = new List<string>();
+
         public void OnGet()
         {
 
@@ -39,6 +40,7 @@ namespace p2pRideshare.Pages
             }
 
             getMatchingRequests();
+            GetRatingComments();
         }
 
         public void getPassengerDetails(string userID)
@@ -78,7 +80,35 @@ namespace p2pRideshare.Pages
                 errorMessage = ex.Message;
             }
         }
+        public void GetRatingComments()
+        {
+            try
+            {
+                using (SqlConnection connection = new SqlConnection(Globals.connection_string))
+                {
+                    string user_sql = "SELECT comment FROM comments WHERE userId=@userId";
+                    connection.Open();
 
+                    using (SqlCommand command = new SqlCommand(user_sql, connection))
+                    {
+                        command.Parameters.AddWithValue("@userId", HttpContext.Session.GetString("UserID"));
+                        using (SqlDataReader reader = command.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                ratingComments.Add(reader.GetString(0));
+
+                            }
+                        }
+                    }
+                    connection.Close();
+                }
+            }
+            catch (Exception ex)
+            {
+                errorMessage = ex.Message;
+            }
+        }
         public void getMatchingRequests()
         {
             try
