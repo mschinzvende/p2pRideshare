@@ -108,9 +108,8 @@ namespace p2pRideshare.Pages
                 }
             }
         }
-        public async void OnPost(IFormFile idpic, IFormFile profilepic)
+        public void OnPost(IFormFile idpic, IFormFile profilepic)
         {
-
 
             try
             { 
@@ -137,7 +136,13 @@ namespace p2pRideshare.Pages
 
 
 
-            await Compare(user.idScan, user.profilePic);
+                Task t = Task.Run(() =>
+                {
+                    Compare(user.idScan, user.profilePic);
+                }
+                );
+
+                t.Wait();
 
                 user.aiVerification = matchConfidence;
             
