@@ -8,15 +8,23 @@ using System.Data.SqlClient;
 using System.Security.Cryptography;
 using System.Text;
 using System.IO;
+using p2pRideshare.Services;
+using Newtonsoft.Json;
+using System.Net.Http.Headers;
+using System.Net;
+using System.Reflection.PortableExecutable;
+using Org.BouncyCastle.Bcpg;
 
 namespace p2pRideshare.Pages
 {
     public class SignupModel : PageModel
     {
         
-        public SignupModel(IFileUploadService fileUploadService)
+        public SignupModel(IFileUploadService fileUploadService, IWebHostEnvironment environment)
         {
             FileUploadService = fileUploadService;
+
+            Environment = environment;
         }
 
        
@@ -24,30 +32,88 @@ namespace p2pRideshare.Pages
         public string errorMessage = "";
         public string successMessage = "";
 
+        public string matchConfidence = "0";
+        public string matchError = string.Empty;
+
         public IFileUploadService FileUploadService { get; }
 
         public User user = new User();
 
+        public IWebHostEnvironment Environment { get; }
 
-        public async void matchFaces()
-        {
-            var client = new HttpClient();
-            var request = new HttpRequestMessage(HttpMethod.Post, "https://api.luxand.cloud/photo/detect");
-            request.Headers.Add("token", "{{94fbde69958541e6aeef2d79a6ba01e6}}");
-            var content = new MultipartFormDataContent();
-            content.Add(new StreamContent(System.IO.File.OpenRead("")), @"wwwroot\mugshots\Selfie.jpg", "");
-            request.Content = content;
-            var response = await client.SendAsync(request);
-            response.EnsureSuccessStatusCode();
-            Console.WriteLine(await response.Content.ReadAsStringAsync());
-        }
         public void OnGet()
         {
-            
+           
+            if (string.IsNullOrEmpty(Request.Query["successMessage"]))
+            {
+                successMessage = "";
+            }
+            else
+            {
+                successMessage = Request.Query["successMessage"];
+            }
+
+            if (string.IsNullOrEmpty(Request.Query["errorMessage"]))
+            {
+                errorMessage = "";
+            }
+            else
+            {
+                errorMessage = Request.Query["errorMessage"];
+            }
         }
 
-        public void OnPost(IFormFile idpic, IFormFile profilepic)
+
+        public async Task Compare(string IDPic, string Profilepic)
         {
+
+            string _apiUrl = "https://faceapi.mxface.ai";
+            string _subscripptionKey = "JbDOOp5DtA3DSstgY7-i9NBNd3RAk2112";
+            string matchConfidence = string.Empty;
+            using (var httpClient = new HttpClient())
+            {
+                string filepathID = Path.Combine(Environment.ContentRootPath, @"wwwroot\mugshots", IDPic);
+                string filepathPic = Path.Combine(Environment.ContentRootPath, @"wwwroot\mugshots", Profilepic);
+                APICompareRequest request = new APICompareRequest
+                {
+                    encoded_image1 = Convert.ToBase64String(System.IO.File.ReadAllBytes(filepathID)),
+                    encoded_image2 = Convert.ToBase64String(System.IO.File.ReadAllBytes(filepathPic)),
+                    //QualityThreshold =56
+                };
+                string jsonRequest = JsonConvert.SerializeObject(request);
+                httpClient.BaseAddress = new Uri(_apiUrl);
+                httpClient.DefaultRequestHeaders.Accept.Clear();
+                httpClient.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+                httpClient.DefaultRequestHeaders.Add("subscriptionkey", _subscripptionKey);
+                var httpContent = new StringContent(jsonRequest, Encoding.UTF8, "application/json");
+                HttpResponseMessage response = await httpClient.PostAsync("/api/v3/face/verify", httpContent);
+                string apiResponse = await response.Content.ReadAsStringAsync();
+                if (response.StatusCode == HttpStatusCode.OK)
+                {
+                    MatchedFaceResponse compareFaces = JsonConvert.DeserializeObject<MatchedFaceResponse>(apiResponse);
+                    foreach (var item in compareFaces.MatchedFaces)
+                    {
+                        matchConfidence = ""+ item.matchResult;
+                    }
+                    //var compareJson = JsonConvert.SerializeObject(compareFaces, Formatting.Indented);
+                    //Console.WriteLine(compareJson);
+
+                    
+                }
+                else
+                {
+                   matchError = "Error {0}, {1}" + response.StatusCode + "/" + apiResponse;
+
+                    
+                }
+            }
+        }
+        public async void OnPost(IFormFile idpic, IFormFile profilepic)
+        {
+
+
+            try
+            { 
             if (idpic != null)
             {
                 user.idScan = FileUploadService.UploadFile(idpic);
@@ -57,8 +123,6 @@ namespace p2pRideshare.Pages
             {
                 user.profilePic = FileUploadService.UploadFile(profilepic);
             }
-
-
 
             user.fullName = Request.Form["fullname"];
             user.phone = Request.Form["phone"];
@@ -73,25 +137,23 @@ namespace p2pRideshare.Pages
 
 
 
-            user.aiVerification = "0"; //code Function to verify ID image and profile pic
+            await Compare(user.idScan, user.profilePic);
 
-            if(Int32.Parse(user.aiVerification)> 50)
+                user.aiVerification = matchConfidence;
+            
+            
+           if (Int32.Parse(user.aiVerification)> 0.5)
             {
                 user.accountStatus = "Approved";
             }
 
-            else if (Int32.Parse(user.aiVerification) < 50)
+            else if (Int32.Parse(user.aiVerification) < 0.5)
             {
                 user.accountStatus = "Pending";
             }
 
             
             
-            
-            
-
-            try
-            {
                 using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                 {
                     connection.Open();
@@ -121,6 +183,8 @@ namespace p2pRideshare.Pages
                     connection.Close();
                 }
 
+                
+
                 if (!SendSignUpEmail(user.email, user.fullName))
                 {
                     successMessage = "Registration Successful but there was an error sending your email confirmation. Please contact support.";
@@ -139,9 +203,9 @@ namespace p2pRideshare.Pages
 
             catch (Exception ex)
             {
-                errorMessage = "That email is already registered";
+                errorMessage = ex.Message;
 
-                
+
             }
    
         }
