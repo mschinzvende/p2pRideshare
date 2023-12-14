@@ -70,6 +70,9 @@
                                     <p class="text-muted text-center">ACCOUNT STATUS: @Model.user.accountStatus</p>
                                     <p class="text-muted text-center">NEXT DUE DATE: @Model.user.subDueDate</p>
 
+                                   
+                                    <a role="button" class="btn btn-primary btn-block" data-toggle="modal" data-target="#deleteacModal">Delete Account</a>
+                                    
                                 </div>
                                 <!-- /.card-body -->
                             </div>
@@ -242,10 +245,7 @@
                                                         
                                                     </div>
 
-                                                    <div class="col-4">
-                                                        <button type="button" class="btn btn-default" data-toggle="modal" data-target="#deleteacModal"> Delete Account </button>
-
-                                                    </div>
+                                                    
                                                     <!-- /.col -->
                                                 </div>
                                             </form>

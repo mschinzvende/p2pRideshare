@@ -43,7 +43,18 @@ namespace p2pRideshare.Pages
 
         public void OnGet()
         {
+
+            if (!string.IsNullOrEmpty(Request.Query["isVerified"]))
+            {
+                HttpContext.Session.SetString("isIDVerified", Request.Query["isVerified"]);
+            }
+
+            if (string.IsNullOrEmpty(Request.Query["isVerified"]))
+            {
+                HttpContext.Session.SetString("isIDVerified", "No");
+            }
            
+
             if (string.IsNullOrEmpty(Request.Query["successMessage"]))
             {
                 successMessage = "";
@@ -61,19 +72,46 @@ namespace p2pRideshare.Pages
             {
                 errorMessage = Request.Query["errorMessage"];
             }
+
+            if (!string.IsNullOrEmpty(Request.Query["idPic"]))
+            {
+                user.idScan = Request.Query["idPic"];
+            }
+
+            if (!string.IsNullOrEmpty(Request.Query["confidenceScore"]))
+            {
+                user.aiVerification = Request.Query["confidenceScore"];
+            }
+
+            if (!string.IsNullOrEmpty(Request.Query["profilePic"]))
+            {
+                user.profilePic = Request.Query["profilePic"];
+            }
+
         }
 
 
-        public async Task Compare(string IDPic, string Profilepic)
+        public async Task OnPostCompare(IFormFile idpic, IFormFile profilepic)
         {
+            if (idpic != null)
+            {
+                user.idScan = FileUploadService.UploadFile(idpic);
+            }
+
+            if (profilepic != null)
+            {
+                user.profilePic = FileUploadService.UploadFile(profilepic);
+            }
+
+
 
             string _apiUrl = "https://faceapi.mxface.ai";
             string _subscripptionKey = "JbDOOp5DtA3DSstgY7-i9NBNd3RAk2112";
             
             using (var httpClient = new HttpClient())
             {
-                string filepathID = Path.Combine(Environment.ContentRootPath, @"wwwroot\mugshots", IDPic);
-                string filepathPic = Path.Combine(Environment.ContentRootPath, @"wwwroot\mugshots", Profilepic);
+                string filepathID = Path.Combine(Environment.ContentRootPath, @"wwwroot\mugshots", user.idScan);
+                string filepathPic = Path.Combine(Environment.ContentRootPath, @"wwwroot\mugshots", user.profilePic);
                 APICompareRequest request = new APICompareRequest
                 {
                     encoded_image1 = Convert.ToBase64String(System.IO.File.ReadAllBytes(filepathID)),
@@ -95,113 +133,105 @@ namespace p2pRideshare.Pages
                     {
                         matchConfidence = ""+ item.matchResult;
                     }
-                    //var compareJson = JsonConvert.SerializeObject(compareFaces, Formatting.Indented);
-                    //Console.WriteLine(compareJson);
-
                     
+
                 }
                 else
                 {
                    matchError = "Error {0}, {1}" + response.StatusCode + "/" + apiResponse;
 
-                    
+                }
+
+                if (float.Parse(matchConfidence) >= 0.5)
+                {
+                    Response.Redirect("/Signup?isVerified=Yes&idPic=" + user.idScan + "&profilePic=" + user.profilePic+"&confidenceScore="+matchConfidence);
+                }
+
+                else
+                {
+                    Response.Redirect("/Signup?isVerified=No");
                 }
             }
         }
-        public void OnPost(IFormFile idpic, IFormFile profilepic)
+        public void OnPost()
         {
 
+
+
             try
-            { 
-            if (idpic != null)
             {
-                user.idScan = FileUploadService.UploadFile(idpic);
-            }
-
-            if (profilepic != null)
-            {
-                user.profilePic = FileUploadService.UploadFile(profilepic);
-            }
-
-            user.fullName = Request.Form["fullname"];
-            user.phone = Request.Form["phone"];
-            user.physicalAddress = Request.Form["physicaladdress"];
-            user.password = Request.Form["password"];
-            user.email = Request.Form["email"];
-            user.idNo = Request.Form["idno"];
-            user.username = user.email;
-            user.password = computePassHash(user.password);
-            user.userType = "General User";
-            user.subDueDate = DateTime.Now.Date.AddDays(30).ToString();
-
-
-
-                Task t = Task.Run(() =>
+                if (HttpContext.Session.GetString("isIDVerified") == "No")
                 {
-                    Compare(user.idScan, user.profilePic);
+                    errorMessage = "ID verification Failed";
+                    return;
                 }
-                );
 
-                t.Wait();
-
-                user.aiVerification = matchConfidence;
-            
-            
-           if (Int32.Parse(user.aiVerification)> 0.5)
-            {
-                user.accountStatus = "Approved";
-            }
-
-            else if (Int32.Parse(user.aiVerification) < 0.5)
-            {
-                user.accountStatus = "Pending";
-            }
-
-            
-            
-                using (SqlConnection connection = new SqlConnection(Globals.connection_string))
+                else if (HttpContext.Session.GetString("isIDVerified") == "Yes")
                 {
-                    connection.Open();
-                    string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus, userType, aiVerification, rating, subDueDate)" +
-                        "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus, @userType, @aiVerification, @rating, @subDueDate)";
 
-                    using (SqlCommand command = new SqlCommand(sql, connection))
+
+
+                    
+
+                    user.fullName = Request.Form["fullname"];
+                    user.phone = Request.Form["phone"];
+                    user.physicalAddress = Request.Form["physicaladdress"];
+                    user.password = Request.Form["password"];
+                    user.email = Request.Form["email"];
+                    user.idNo = Request.Form["idno"];
+                    user.username = user.email;
+                    user.password = computePassHash(user.password);
+                    user.userType = "General User";
+                    user.subDueDate = DateTime.Now.Date.AddDays(30).ToString("dd/MM/yyyy");
+                    user.idScan = Request.Form["idPicture"];
+                    user.profilePic = Request.Form["profilePicture"];
+                    user.aiVerification = Request.Form["confidenceScore"];
+
+                    using (SqlConnection connection = new SqlConnection(Globals.connection_string))
                     {
-                        command.Parameters.AddWithValue("@fullName", user.fullName);
-                        command.Parameters.AddWithValue("@idNo", user.idNo);
-                        command.Parameters.AddWithValue("@idScan", user.idScan);
-                        command.Parameters.AddWithValue("@profilePic", user.profilePic);
-                        command.Parameters.AddWithValue("@phone", user.phone);
-                        command.Parameters.AddWithValue("@email", user.email);
-                        command.Parameters.AddWithValue("@physicalAddress", user.physicalAddress);
-                        command.Parameters.AddWithValue("@userName", user.username);
-                        command.Parameters.AddWithValue("@password", user.password);
-                        command.Parameters.AddWithValue("@accountStatus", user.accountStatus);
-                        command.Parameters.AddWithValue("@userType", user.userType);
-                        command.Parameters.AddWithValue("@aiVerification", user.aiVerification);
-                        command.Parameters.AddWithValue("@rating",0);
-                        command.Parameters.AddWithValue("@subDueDate", user.subDueDate);
+                        connection.Open();
+                        string sql = "INSERT INTO users (fullName, idNo, idScan, profilePic, phone, email, physicalAddress, userName, password, accountStatus, userType, aiVerification, rating, subDueDate)" +
+                            "VALUES (@fullName, @idNo, @idScan, @profilePic, @phone, @email, @physicalAddress, @userName, @password, @accountStatus, @userType, @aiVerification, @rating, @subDueDate)";
 
-                        command.ExecuteNonQuery();
+                        using (SqlCommand command = new SqlCommand(sql, connection))
+                        {
+                            command.Parameters.AddWithValue("@fullName", user.fullName);
+                            command.Parameters.AddWithValue("@idNo", user.idNo);
+                            command.Parameters.AddWithValue("@idScan", user.idScan);
+                            command.Parameters.AddWithValue("@profilePic", user.profilePic);
+                            command.Parameters.AddWithValue("@phone", user.phone);
+                            command.Parameters.AddWithValue("@email", user.email);
+                            command.Parameters.AddWithValue("@physicalAddress", user.physicalAddress);
+                            command.Parameters.AddWithValue("@userName", user.username);
+                            command.Parameters.AddWithValue("@password", user.password);
+                            command.Parameters.AddWithValue("@accountStatus", "Approved");
+                            command.Parameters.AddWithValue("@userType", user.userType);
+                            command.Parameters.AddWithValue("@aiVerification", user.aiVerification);
+                            command.Parameters.AddWithValue("@rating", 0);
+                            command.Parameters.AddWithValue("@subDueDate", user.subDueDate);
+
+                            command.ExecuteNonQuery();
+                        }
+
+                        connection.Close();
                     }
 
-                    connection.Close();
-                }
 
-                
 
-                if (!SendSignUpEmail(user.email, user.fullName))
-                {
-                    successMessage = "Registration Successful but there was an error sending your email confirmation. Please contact support.";
-                }
+                    if (!SendSignUpEmail(user.email, user.fullName))
+                    {
+                        successMessage = "Registration Successful but there was an error sending your email confirmation. Please contact support.";
+                    }
 
-                else 
-                {
-                    successMessage = "We have created an account for you. Please Login";
-                        
+                    else
+                    {
+                        successMessage = "We have created an account for you. Please Login";
+
+                    }
+
+                    Response.Redirect("/?successMessage=" + successMessage);
+
                 }
-                
-                Response.Redirect("/?successMessage=" + successMessage);
             }
 
 

@@ -243,6 +243,8 @@ namespace p2pRideshare.Pages
                         command.ExecuteNonQuery();
                     }
                 }
+
+                Response.Redirect("/");
             }
 
             catch (Exception ex)

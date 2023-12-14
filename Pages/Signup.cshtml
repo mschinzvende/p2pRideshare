@@ -4,7 +4,7 @@
 
     Layout = null;
 }
-
+@inject IHttpContextAccessor httpContextAccessor
 
 <!DOCTYPE html>
 <html lang="en">
@@ -51,8 +51,63 @@
 
 
                 }
-      <form method="POST" enctype="multipart/form-data" >
 
+                @if (@httpContextAccessor.HttpContext.Session.GetString("isIDVerified") == "No")
+                {
+
+                    <div class="alert alert-warning" role="alert">
+                        <strong>ID Not Verified. Please Verify Your ID</strong>
+                    </div>
+
+                    <form method="POST" enctype="multipart/form-data" asp-page-handler="compare" >
+                        <div class="row">
+                            
+                                <div class="col-sm-6">
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="profilepic" name="profilepic" onchange="previewProfile()" accept="image/*" capture required>
+                                            <label class="custom-file-label" for="profilepic">Upload your profile picture</label>
+                                        </div>
+
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <img class="img-thumbnail" style="width:40%" src="" id="profileFrame" alt="Upload Profile Pic">
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                
+                                    <div class="input-group">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="idpic" name="idpic" onchange="previewId()" accept="image/*" capture required>
+                                            <label class="custom-file-label" for="idpic">Upload picture of your ID</label>
+                                        </div>
+                                    </div>
+                                    <div class="input-group mb-3">
+                                        <img class="img-thumbnail" style="width:40%" src="" id="idFrame" alt="Upload ID Pic">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col">
+                                        <button type="submit" id="submitBtn" name="submitBtn" class="btn btn-primary btn-block">Verify</button>
+                                    </div>
+                                </div>
+
+                            
+                        </div>
+                    </form>
+                }
+
+                @if (@httpContextAccessor.HttpContext.Session.GetString("isIDVerified") == "Yes")
+                {
+                    <div class="alert alert-warning" role="alert">
+                        <strong>Your ID is verified. Proceed to complete your profile info</strong>
+                    </div>
+                    <form method="POST" enctype="multipart/form-data" >
+
+
+                        <input type="hidden" class="form-control" id="idPicture" name="idPicture" value="@Model.user.idScan" required>
+                        <input type="hidden" class="form-control" id="profilePicture" name="profilePicture" value="@Model.user.profilePic" required>
+                        <input type="hidden" class="form-control" id="confidenceScore" name="confidenceScore" value="@Model.user.aiVerification" required>
 
         <div class="row">
             <div class="col-12">
@@ -99,15 +154,7 @@
         <!-- An element to toggle between password visibility -->
             <input type="checkbox" onclick="myFunction()"> Show Password
 
-         <div class="input-group mb-3 mt-1">
-        <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="idpic" name="idpic" onchange="previewId()" accept="image/*" capture required>
-                      <label class="custom-file-label" for="idpic">Upload picture of your ID</label>
-                    </div>
-               </div>
-               <div class="input-group mb-3">
-                  <img class="img-thumbnail" style="width:40%" src="" id="idFrame" alt="Upload ID Pic">
-               </div>
+         
 
 
         </div>
@@ -143,16 +190,7 @@
         <div class="form-text confirm-message">.</div>
         
 
-          <div class="input-group mb-3 mt-1">
-        <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="profilepic" name="profilepic" onchange="previewProfile()" accept="image/*" capture required>
-                      <label class="custom-file-label" for="profilepic">Upload your passport sized picture</label>
-                    </div>
           
-               </div>
-               <div class="input-group mb-3">
-                  <img class="img-thumbnail" style="width:40%" src="" id="profileFrame" alt="Upload Profile Pic">
-               </div>
 
         </div>
 
@@ -174,6 +212,7 @@
           <!-- /.col -->
         </div>
       </form>
+      }
       
 
       <a href="\" class="text-center">I already have a membership</a>
