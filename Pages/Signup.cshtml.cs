@@ -169,10 +169,6 @@ namespace p2pRideshare.Pages
                 else if (HttpContext.Session.GetString("isIDVerified") == "Yes")
                 {
 
-
-
-                    
-
                     user.fullName = Request.Form["fullname"];
                     user.phone = Request.Form["phone"];
                     user.physicalAddress = Request.Form["physicaladdress"];
