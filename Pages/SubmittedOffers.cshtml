@@ -53,7 +53,7 @@
                 @foreach (var item in Model.offersForUserList)
                 {
                     <div class="col-sm-4">
-                        @if (@item.offerStatus == "Waiting" || item.offerStatus == string.Empty || item.offerStatus!="Cancelled")
+                        @if (@item.offerStatus == "Waiting" || item.offerStatus == string.Empty)
                         {
                             @if (@item.offerStatus == "Waiting")
                             {
@@ -196,7 +196,7 @@
                             </div>
                         }
 
-                        @if (@item.offerStatus == "Accepted" || item.offerStatus == "Rejected")
+                        @if (@item.offerStatus == "Accepted" || item.offerStatus == "Rejected" || item.offerStatus == "Cancelled")
                         {
                             @if (@item.offerStatus == "Accepted")
                             {
@@ -213,6 +213,16 @@
                                 <div class="mb-3 mb-lg-0">
                                     <div class="alert alert-danger" role="alert">
                                         <strong>Offer Rejected </strong>
+                                    </div>
+
+                                </div>
+                            }
+
+                            @if (@item.offerStatus == "Cancelled")
+                            {
+                                <div class="mb-3 mb-lg-0">
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Offer Cancelled </strong>
                                     </div>
 
                                 </div>
@@ -290,10 +300,10 @@
                                                     <input type="text" id="vehicleMake" name="vehicleMake" value="@item.vehicleMake" class="form-control" readonly>
                                                 </div>
                                             </div>
+                                            </div>
 
 
-
-
+                                        <div class="row">
 
                                             <div class="col-sm-4">
                                                 <div class="form-group">
@@ -301,15 +311,19 @@
                                                     <input type="text" id="vehicleColor" name="vehicleColor" value="@item.vehicleColor" class="form-control" readonly>
                                                 </div>
                                             </div>
+                                            </div>
                                         
                                                          
 
 
                                         <div class="row">
-                                            
-                                            <div class="col-sm-12">
-                                                <a  href="/SubmittedOffers?offerId=@item.offerId&action=Cancel" class="btn btn-primary btn-block">Cancel Request</a>
-                                            </div>
+                                                @if (item.offerStatus =="Accepted")
+                                                {
+                                                    <div class="col-sm-12">
+                                                        <a href="/SubmittedOffers?offerId=@item.offerId&action=Cancel" class="btn btn-primary btn-block">Cancel Request</a>
+                                                    </div>
+                                                }
+                                                
                                         </div>
                                     </form>
 

@@ -53,7 +53,7 @@
                 @foreach (var item in Model.requestsForUserList)
                 {
                     <div class="col-sm-4">
-                        @if (@item.requestStatus == "Waiting" || item.requestStatus == string.Empty || item.requestStatus!="Cancelled")
+                        @if (@item.requestStatus == "Waiting" || item.requestStatus == string.Empty)
                         {
                             @if (@item.requestStatus == "Waiting")
                             {
@@ -196,7 +196,7 @@
                             </div>
                         }
 
-                        @if (@item.requestStatus == "Accepted" || item.requestStatus == "Rejected")
+                        @if (@item.requestStatus == "Accepted" || item.requestStatus == "Rejected" || item.requestStatus == "Cancelled")
                         {
                             @if (@item.requestStatus == "Accepted")
                             {
@@ -218,6 +218,16 @@
                                 </div>
                             }
 
+
+                            @if (@item.requestStatus == "Cancelled")
+                            {
+                                <div class="mb-3 mb-lg-0">
+                                    <div class="alert alert-danger" role="alert">
+                                        <strong>Offer Cancelled </strong>
+                                    </div>
+
+                                </div>
+                            }
                             <div class="our-team">
                                 <div class="picture">
                                     <img class="img-fluid" src="~/mugshots/@HttpContext.Session.GetString("UserPICTURE")">
@@ -303,10 +313,14 @@
                                             </div>
                                         </div>
                                         <div class="row">
+                                            @if (item.requestStatus == "Accepted" )
+                                            {
+                                                <div class="col-sm-12">
+                                                    <a href="/RequestedRides?requestId=@item.requestId&action=Cancel" class="btn btn-primary btn-block">Cancel Request</a>
+                                                </div>
+                                            }
+
                                             
-                                            <div class="col-sm-12">
-                                                <a  href="/RequestedRides?requestId=@item.requestId&action=Cancel" class="btn btn-primary btn-block">Cancel Request</a>
-                                            </div>
                                         </div>
                                     </form>
 
